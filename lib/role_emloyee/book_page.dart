@@ -18,7 +18,7 @@ class BookPageState extends State<BookPage> {
         title: const Text('Карта офиса'),
         automaticallyImplyLeading: false,
       ),
-      body: OfficeMap(),
+      body: const OfficeMap(),
     );
   }
 }
@@ -91,20 +91,20 @@ class _OfficeMapState extends State<OfficeMap> {
                             builder: (context) {
                               return AlertDialog(
                                 title: Text('Рабочее место ${i + 1}'),
-                                content: Text('Забронировать это место?'),
+                                content: const Text('Забронировать это место?'),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text('Отмена'),
+                                    child: const Text('Отмена'),
                                   ),
                                   TextButton(
                                     onPressed: () {
                                       _bookPlace(i);
                                       Navigator.pop(context);
                                     },
-                                    child: Text('Забронировать'),
+                                    child: const Text('Забронировать'),
                                   ),
                                 ],
                               );

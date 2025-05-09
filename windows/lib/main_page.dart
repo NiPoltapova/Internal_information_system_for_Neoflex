@@ -25,7 +25,7 @@ class MainApp extends StatelessWidget {
         //   return PersonalChatPage();
         // },
         '/page3': (context) {
-          return Profile();
+          return const Profile();
         },
       },
     );

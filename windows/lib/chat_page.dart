@@ -90,7 +90,7 @@ class ChatPageState extends State<ChatPage> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     contentPadding: const EdgeInsets.all(16.0),
-                    leading: CircleAvatar(
+                    leading: const CircleAvatar(
                       backgroundImage: AssetImage(
                           "assets/images/imageMyProfile.jpg"), // Замените на динамическое изображение
                     ),
@@ -113,7 +113,7 @@ class ChatPageState extends State<ChatPage> {
                             borderRadius: BorderRadius.circular(
                                 12), // Закругление углов для уведомлений
                           ),
-                          child: Text('3',
+                          child: const Text('3',
                               style: TextStyle(
                                   color:
                                       Colors.white)), // Количество уведомлений
@@ -143,7 +143,7 @@ class ChatPageState extends State<ChatPage> {
           currentIndex: _selectedIndex, // Индекс выбранного элемента
           onTap: _onItemTapped, // Метод для обработки нажатий
           selectedItemColor:
-              Color(0xFF48036F), // Фиолетовый цвет для выбранного элемента
+              const Color(0xFF48036F), // Фиолетовый цвет для выбранного элемента
           unselectedItemColor:
               Colors.grey, // Серый цвет для невыбранных элементов
         ),

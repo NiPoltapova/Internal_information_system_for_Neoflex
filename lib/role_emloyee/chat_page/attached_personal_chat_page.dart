@@ -42,7 +42,7 @@ class _AttachedPersonalChatPageState extends State<AttachedPersonalChatPage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Center(
+                  const Center(
                     child: CircleAvatar(
                       radius: 50,
                       backgroundImage: NetworkImage(
@@ -52,7 +52,7 @@ class _AttachedPersonalChatPageState extends State<AttachedPersonalChatPage> {
                   const SizedBox(height: 10),
                   Text(
                     widget.userId,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 5),
@@ -88,15 +88,15 @@ class _AttachedPersonalChatPageState extends State<AttachedPersonalChatPage> {
             const SizedBox(height: 20),
 
             // Phone Number
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
-                  const Icon(Icons.phone, color: Colors.green),
-                  const SizedBox(width: 10),
+                  Icon(Icons.phone, color: Colors.green),
+                  SizedBox(width: 10),
                   Text(
                     '+7 (xxx) xxx-xx-xx',
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
+                    style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
                 ],
               ),
@@ -108,7 +108,7 @@ class _AttachedPersonalChatPageState extends State<AttachedPersonalChatPage> {
             //_buildListTile(Icons.monetization_on, 'Деньги'),
 
             // Tabs Section
-            Expanded(
+            const Expanded(
               child: DefaultTabController(
                 length: 5,
                 child: Column(
@@ -118,7 +118,7 @@ class _AttachedPersonalChatPageState extends State<AttachedPersonalChatPage> {
                       labelColor: Colors.black,
                       unselectedLabelColor: Colors.grey,
                       indicatorColor: Colors.green,
-                      tabs: const [
+                      tabs: [
                         Tab(text: 'Фото'),
                         Tab(text: 'Видео'),
                         Tab(text: 'Музыка'),
@@ -130,17 +130,17 @@ class _AttachedPersonalChatPageState extends State<AttachedPersonalChatPage> {
                       child: TabBarView(
                         children: [
                           // Content for each tab
-                          const Center(
+                          Center(
                             child: Text(
                               'Здесь будут отображаться фотографии из чата',
                               style:
                                   TextStyle(fontSize: 16, color: Colors.grey),
                             ),
                           ),
-                          const Center(child: Text('Видео')),
-                          const Center(child: Text('Музыка')),
-                          const Center(child: Text('Сервисы')),
-                          const Center(child: Text('Файлы')),
+                          Center(child: Text('Видео')),
+                          Center(child: Text('Музыка')),
+                          Center(child: Text('Сервисы')),
+                          Center(child: Text('Файлы')),
                         ],
                       ),
                     ),
@@ -158,8 +158,8 @@ class _AttachedPersonalChatPageState extends State<AttachedPersonalChatPage> {
     return Column(
       children: [
         Icon(icon, color: Colors.green),
-        SizedBox(height: 5),
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey)),
+        const SizedBox(height: 5),
+        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
       ],
     );
   }

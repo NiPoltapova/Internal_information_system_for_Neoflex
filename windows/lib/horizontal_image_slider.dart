@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class HorizontalImageSlider extends StatefulWidget {
   final List<String> imageUrls;
 
-  const HorizontalImageSlider({Key? key, required this.imageUrls})
-      : super(key: key);
+  const HorizontalImageSlider({super.key, required this.imageUrls});
 
   @override
   _HorizontalImageSliderState createState() => _HorizontalImageSliderState();

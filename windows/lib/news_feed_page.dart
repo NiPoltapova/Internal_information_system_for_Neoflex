@@ -23,7 +23,7 @@ class Post {
 }
 
 class NewsFeed extends StatefulWidget {
-  const NewsFeed({Key? key}) : super(key: key);
+  const NewsFeed({super.key});
 
   @override
   NewsFeedState createState() => NewsFeedState();
@@ -155,7 +155,7 @@ class NewsFeedState extends State<NewsFeed> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => NewPostPage()),
+                      MaterialPageRoute(builder: (context) => const NewPostPage()),
                     );
                   },
                 ),

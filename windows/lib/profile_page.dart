@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'database.dart'; // Импортируйте ваш класс DatabaseHelper
 
 class Profile extends StatefulWidget {
-  Profile({super.key});
+  const Profile({super.key});
 
   @override
   _ProfileState createState() => _ProfileState();
@@ -176,7 +176,7 @@ class _ProfileState extends State<Profile> {
           currentIndex: _selectedIndex, // Индекс выбранного элемента
           onTap: _onItemTapped, // Метод для обработки нажатий
           selectedItemColor:
-              Color(0xFF48036F), // Фиолетовый цвет для выбранного элемента
+              const Color(0xFF48036F), // Фиолетовый цвет для выбранного элемента
           unselectedItemColor:
               Colors.grey, // Серый цвет для невыбранных элементов
         ));

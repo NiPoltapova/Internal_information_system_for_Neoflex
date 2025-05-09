@@ -7,15 +7,14 @@ class PublicationPage extends StatefulWidget {
   final String text;
 
   const PublicationPage(
-      {Key? key, required this.selectedImages, required this.text})
-      : super(key: key);
+      {super.key, required this.selectedImages, required this.text});
 
   @override
   _PublicationPageState createState() => _PublicationPageState();
 }
 
 class _PublicationPageState extends State<PublicationPage> {
-  List<PlatformFile> _selectedFiles = [];
+  final List<PlatformFile> _selectedFiles = [];
 
   Future<void> _pickFiles() async {
     FilePickerResult? result =
@@ -55,7 +54,7 @@ class _PublicationPageState extends State<PublicationPage> {
       body: ListView(
         children: [
           if (widget.selectedImages.isNotEmpty)
-            Container(
+            SizedBox(
               height: imageHeight,
               child: PageView.builder(
                 itemCount: widget.selectedImages.length,
@@ -119,7 +118,7 @@ class _PublicationPageState extends State<PublicationPage> {
                       },
                     ),
                   ))
-              .toList(),
+              ,
           const ListTile(
             title: Text('Когда опубликовать',
                 style: TextStyle(color: Colors.black)),

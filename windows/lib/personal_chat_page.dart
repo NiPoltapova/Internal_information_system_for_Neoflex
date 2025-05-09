@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news_feed_neoflex/attached_personal_chat_page.dart';
 
 class PersonalChatPage extends StatefulWidget {
-  const PersonalChatPage({Key? key, required this.userId}) : super(key: key);
+  const PersonalChatPage({super.key, required this.userId});
 
   final String userId;
 

@@ -1,46 +1,58 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:news_feed_neoflex/role_manager/users_page/create_user_page.dart';
 import 'package:news_feed_neoflex/role_manager/users_page/user_profile_page.dart';
 import 'dart:io';
+import 'package:openapi/openapi.dart';
+import 'package:http/http.dart' as http;
 
 class ListOfUsers extends StatefulWidget {
   const ListOfUsers({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ListOfUsersState createState() => _ListOfUsersState();
 }
 
 class _ListOfUsersState extends State<ListOfUsers> {
-  final List<Map<String, String>> _users = List.generate(20, (index) {
-    return {
-      'name': 'user_$index',
-      'fio': 'Бублик Петрович $index',
-      'phone': '+7 (${index.toString().padLeft(3, '0')}) 123-45-67',
-      'position': 'Должность $index',
-      'role': index % 2 == 0 ? 'Сотрудник' : 'Менеджер',
-      'login': 'user$index',
-      'password': 'password$index',
-      'birthDate': '01.01.199${index % 10}',
-    };
-  });
-
-  List<Map<String, String>> _filteredUsers = [];
+  static const Map<String, String> _roleDisplayNames = {
+    'ROLE_USER': 'Сотрудник',
+    'ROLE_ADMIN': 'Администратор',
+  };
+  final UserControllerApi userApi = GetIt.I<Openapi>().getUserControllerApi();
+  List<UserDTO> _users = []; // Получаем пользователей
+  List<UserDTO> _filteredUsers = [];
   final TextEditingController _searchController = TextEditingController();
   int _selectedIndex = 3;
-  final Map<String, File?> _userAvatars = {};
   bool _isSearchActive = false;
+  bool _isLoading = true;
+  String? _errorMessage;
+  final String _avatarBaseUrl = 'http://localhost:8080';
 
   @override
   void initState() {
     super.initState();
-    _filteredUsers = _users;
+    _loadUsers();
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+  Future<void> _loadUsers() async {
+    try {
+      setState(() => _isLoading = true);
+      final response = await userApi.getAllUsers();
+      if (response.data != null) {
+        setState(() {
+          _users = response.data!.toList();
+          _filteredUsers = List.from(_users);
+        });
+      }
+    } catch (e) {
+      debugPrint('Ошибка загрузки пользователей: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка загрузки: ${e.toString()}')),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   void _filterUsers() {
@@ -48,8 +60,11 @@ class _ListOfUsersState extends State<ListOfUsers> {
     setState(() {
       _isSearchActive = query.isNotEmpty;
       _filteredUsers = _users.where((user) {
-        return user['fio']!.toLowerCase().contains(query) ||
-            user['position']!.toLowerCase().contains(query);
+        final fio =
+            '${user.firstName ?? ''} ${user.lastName ?? ''} ${user.patronymic ?? ''}'
+                .toLowerCase();
+        return fio.contains(query) ||
+            (user.appointment?.toLowerCase().contains(query) ?? false);
       }).toList();
     });
   }
@@ -58,7 +73,7 @@ class _ListOfUsersState extends State<ListOfUsers> {
     setState(() {
       _searchController.clear();
       _isSearchActive = false;
-      _filteredUsers = _users;
+      _filteredUsers = List.from(_users);
     });
   }
 
@@ -76,48 +91,159 @@ class _ListOfUsersState extends State<ListOfUsers> {
     }
   }
 
-  void _updateUserData(Map<String, String> updatedUser) {
-    setState(() {
-      final userIdentifier = updatedUser['name'] ?? updatedUser['fio'];
-
-      int index = _users.indexWhere((u) =>
-          (u['name'] != null && u['name'] == userIdentifier) ||
-          (u['fio'] != null && u['fio'] == userIdentifier));
-
-      if (index != -1) {
-        _users[index] = updatedUser;
-        if (_isSearchActive) {
-          _filterUsers();
-        } else {
-          _filteredUsers = List.from(_users);
-        }
+  Future<void> _updateUserData(UserDTO updatedUser) async {
+    try {
+      if (updatedUser.id == null) {
+        throw Exception('ID пользователя отсутствует');
       }
-    });
-  }
 
-  void _deleteUser(String userName) {
-    setState(() {
-      _users.removeWhere((user) => user['name'] == userName);
-      _userAvatars.remove(userName);
-      if (_isSearchActive) {
-        _filterUsers();
-      } else {
-        _filteredUsers = List.from(_users);
+      // Логирование данных перед отправкой
+      debugPrint(
+          'Отправка обновления пользователя: ${updatedUser.toBuilder()}');
+
+      // Используем правильный endpoint для админского обновления
+      final response = await GetIt.I<Openapi>()
+          .getUserControllerApi()
+          .updateCurrentUser(userDTO: updatedUser);
+
+      if (response.data == null) {
+        throw Exception('Не удалось обновить пользователя: ответ сервера пуст');
       }
-    });
+
+      await _loadUsers();
+    } catch (e) {
+      debugPrint('Ошибка обновления пользователя: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Ошибка обновления: ${e.toString()}'),
+        ),
+      );
+      rethrow;
+    }
   }
 
-  void _addNewUser(Map<String, String> newUser) {
-    setState(() {
-      _users.insert(0, newUser);
-      _filterUsers();
-    });
+  Future<void> _deleteUser(int userId) async {
+    try {
+      await userApi.adminDeleteUser(id: userId);
+      await _loadUsers();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Ошибка удаления пользователя: ${e.toString()}')),
+      );
+    }
   }
 
-  void _updateAvatar(String userFio, File? avatarFile) {
-    setState(() {
-      _userAvatars[userFio] = avatarFile;
-    });
+  Future<void> _addNewUser(Map<String, String?> userData) async {
+    try {
+      final parts = (userData['fio'] ?? '').split(' ');
+      final createRequest = UserCreateRequestDTO((b) => b
+        ..firstName = parts.isNotEmpty ? parts[0] : null
+        ..lastName = parts.length > 1 ? parts[1] : null
+        ..patronymic = parts.length > 2 ? parts[2] : null
+        ..phoneNumber = userData['phone']
+        ..appointment = userData['position']
+        ..role =
+            userData['role'] == 'Администратор' ? 'ROLE_ADMIN' : 'ROLE_USER'
+        ..login = userData['login']
+        ..password = userData['password']
+        ..birthday = userData['birthDate']?.isNotEmpty == true
+            ? _parseDate(userData['birthDate']!)
+            : null);
+
+      await userApi.adminCreateUser(userCreateRequestDTO: createRequest);
+      await _loadUsers();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Ошибка создания пользователя: ${e.toString()}')),
+      );
+    }
+  }
+
+  Date? _parseDate(String dateString) {
+    try {
+      final dateTime = DateTime.parse(dateString);
+      return Date(dateTime.year, dateTime.month, dateTime.day);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> _updateAvatar(UserDTO user, File? avatarFile) async {
+    if (avatarFile == null) return;
+
+    try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+      final bytes = await avatarFile.readAsBytes();
+      final uploadRequest = UploadAvatarRequest((b) => b..file = bytes);
+
+      final response =
+          await userApi.uploadAvatar(uploadAvatarRequest: uploadRequest);
+      final newAvatarUrl = response.data;
+
+      Navigator.of(context).pop();
+
+      if (newAvatarUrl != null) {
+        final updatedUser = user.rebuild((b) => b..avatarUrl = newAvatarUrl);
+        await _updateUserData(updatedUser);
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка обновления аватарки: ${e.toString()}')),
+      );
+    }
+  }
+
+  Widget _buildAvatarWidget(UserDTO user) {
+    final avatarUrl = user.avatarUrl != null
+        ? user.avatarUrl!.startsWith('http')
+            ? user.avatarUrl
+            : '$_avatarBaseUrl${user.avatarUrl}'
+        : null;
+
+    return avatarUrl != null
+        ? ClipOval(
+            child: CachedNetworkImage(
+              imageUrl: avatarUrl,
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Container(
+                width: 40,
+                height: 40,
+                color: Colors.grey,
+                child: const Icon(Icons.person, size: 20, color: Colors.white),
+              ),
+              errorWidget: (context, url, error) {
+                debugPrint('Failed to load avatar: $url, error: $error');
+                return Container(
+                  width: 40,
+                  height: 40,
+                  color: Colors.grey,
+                  child: const Icon(Icons.error, size: 20),
+                );
+              },
+              httpHeaders: {
+                'Authorization':
+                    'Bearer YOUR_ACCESS_TOKEN', // Добавьте если нужно
+              },
+            ),
+          )
+        : Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.person, size: 20, color: Colors.white),
+          );
   }
 
   @override
@@ -149,7 +275,6 @@ class _ListOfUsersState extends State<ListOfUsers> {
                   },
                 ),
               ],
-              //scrolledUnderElevation: 0, // Убирает тень при прокрутке
               surfaceTintColor: const Color.fromARGB(255, 100, 29, 113),
             ),
             const Divider(
@@ -167,68 +292,83 @@ class _ListOfUsersState extends State<ListOfUsers> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                  labelText: 'Поиск пользователей',
-                  labelStyle: const TextStyle(
-                    color: Color.fromARGB(255, 104, 102, 102),
-                  ),
-                  hintText: 'Введите имя...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.purple, width: 2),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  suffixIcon: IconButton(
-                      icon: Icon(
-                        _isSearchActive ? Icons.close : Icons.search,
-                      ),
-                      onPressed: () {
-                        if (_isSearchActive) {
-                          _clearSearch();
-                        } else {
-                          _filterUsers();
-                        }
-                      })),
+                labelText: 'Поиск пользователей',
+                labelStyle: const TextStyle(
+                  color: Color.fromARGB(255, 104, 102, 102),
+                ),
+                hintText: 'Введите имя...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.purple, width: 2),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(_isSearchActive ? Icons.close : Icons.search),
+                  onPressed: () {
+                    if (_isSearchActive) {
+                      _clearSearch();
+                    } else {
+                      _filterUsers();
+                    }
+                  },
+                ),
+              ),
               onSubmitted: (_) => _filterUsers(),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _filteredUsers.length,
-              itemBuilder: (context, index) {
-                final user = _filteredUsers[index];
-                final avatarFile = _userAvatars[user['fio']];
-                return ListTile(
-                  title: Text(user['fio']!),
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    backgroundImage:
-                        avatarFile != null ? FileImage(avatarFile) : null,
-                    child: avatarFile == null
-                        ? const Icon(Icons.camera_alt, color: Colors.white)
-                        : null,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UserProfilePage(
-                          userData: user,
-                          initialAvatar: _userAvatars[user['fio']],
-                          onSave: _updateUserData,
-                          onDelete: _deleteUser,
-                          onAvatarChanged: (file) =>
-                              _updateAvatar(user['fio']!, file),
+          if (_isLoading)
+            const Center(child: CircularProgressIndicator())
+          else if (_errorMessage != null)
+            Center(child: Text(_errorMessage!))
+          else
+            Expanded(
+              child: ListView.builder(
+                itemCount: _filteredUsers.length,
+                itemBuilder: (context, index) {
+                  final user = _filteredUsers[index];
+                  final userFio =
+                      '${user.firstName ?? ''} ${user.lastName ?? ''} ${user.patronymic ?? ''}';
+                  final avatarUrl = user.avatarUrl != null
+                      ? '$_avatarBaseUrl/${user.avatarUrl}'
+                      : null;
+                  return ListTile(
+                    title: Text(userFio),
+                    // subtitle: Text(
+                    //     '${user.appointment ?? ''} - ${_roleDisplayNames[user.role] ?? user.role ?? ''}'),
+                    leading: _buildAvatarWidget(user),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserProfilePage(
+                            userData: {
+                              'id': user.id?.toString() ?? '',
+                              'fio':
+                                  '${user.firstName ?? ''} ${user.lastName ?? ''} ${user.patronymic ?? ''}',
+                              'phone': user.phoneNumber ?? '',
+                              'position': user.appointment ?? '',
+                              'role': user.role ?? 'ROLE_USER',
+                              'login': user.login ?? '',
+                              'birthDate': user.birthday?.toString() ?? '',
+                              'avatarUrl': avatarUrl ?? '',
+                            },
+                            initialAvatar: user.avatarUrl != null
+                                ? File(user.avatarUrl!)
+                                : null,
+                            onSave: _updateUserData,
+                            onDelete: _deleteUser,
+                            onAvatarChanged: (file) =>
+                                _updateAvatar(user, file),
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -240,7 +380,7 @@ class _ListOfUsersState extends State<ListOfUsers> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Color(0xFF48036F),
+        selectedItemColor: const Color(0xFF48036F),
         unselectedItemColor: Colors.grey,
       ),
     );

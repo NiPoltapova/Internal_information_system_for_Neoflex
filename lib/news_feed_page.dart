@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:news_feed_neoflex/features/auth/presentation/screens/login_screen.dart';
 import 'package:news_feed_neoflex/horizontal_image_slider.dart';
 import 'package:news_feed_neoflex/post_model.dart';
 import 'package:news_feed_neoflex/role_manager/edit_post_page.dart';
@@ -454,6 +455,14 @@ class NewsFeedState extends State<NewsFeed> {
         ),
         actions: [
           IconButton(
+              icon: const Icon(Icons.account_circle),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              }), //Переход на страницу авторизации
+          IconButton(
             icon: const Icon(Icons.filter_alt),
             onPressed: () {
               setState(() {
@@ -470,10 +479,10 @@ class NewsFeedState extends State<NewsFeed> {
               );
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.notifications_none),
-            onPressed: () {},
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.notifications_none),
+          //   onPressed: () {},
+          // ),
         ],
         surfaceTintColor: const Color.fromARGB(255, 100, 29, 113),
       ),

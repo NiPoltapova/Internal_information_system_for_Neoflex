@@ -6,7 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'publication_page.dart';
 
 class NewPostPage extends StatefulWidget {
-  const NewPostPage({Key? key}) : super(key: key);
+  const NewPostPage({super.key});
 
   @override
   _NewPostPageState createState() => _NewPostPageState();
@@ -14,7 +14,7 @@ class NewPostPage extends StatefulWidget {
 
 class _NewPostPageState extends State<NewPostPage> {
   final TextEditingController _textController = TextEditingController();
-  List<File> _selectedImages = [];
+  final List<File> _selectedImages = [];
   bool _isNextButtonEnabled = false;
 
   @override
@@ -156,7 +156,7 @@ class _NewPostPageState extends State<NewPostPage> {
               keyboardType: TextInputType.multiline,
             ),
             if (_selectedImages.isNotEmpty)
-              Container(
+              SizedBox(
                 height: imageHeight,
                 child: PageView.builder(
                   itemCount: _selectedImages.length,
