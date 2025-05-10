@@ -12,7 +12,7 @@ class _$UserDTO extends UserDTO {
   @override
   final String? login;
   @override
-  final String? role;
+  final String? roleName;
   @override
   final String? lastName;
   @override
@@ -34,7 +34,7 @@ class _$UserDTO extends UserDTO {
   _$UserDTO._(
       {this.id,
       this.login,
-      this.role,
+      this.roleName,
       this.lastName,
       this.firstName,
       this.patronymic,
@@ -57,7 +57,7 @@ class _$UserDTO extends UserDTO {
     return other is UserDTO &&
         id == other.id &&
         login == other.login &&
-        role == other.role &&
+        roleName == other.roleName &&
         lastName == other.lastName &&
         firstName == other.firstName &&
         patronymic == other.patronymic &&
@@ -72,7 +72,7 @@ class _$UserDTO extends UserDTO {
     var _$hash = 0;
     _$hash = $jc(_$hash, id.hashCode);
     _$hash = $jc(_$hash, login.hashCode);
-    _$hash = $jc(_$hash, role.hashCode);
+    _$hash = $jc(_$hash, roleName.hashCode);
     _$hash = $jc(_$hash, lastName.hashCode);
     _$hash = $jc(_$hash, firstName.hashCode);
     _$hash = $jc(_$hash, patronymic.hashCode);
@@ -89,7 +89,7 @@ class _$UserDTO extends UserDTO {
     return (newBuiltValueToStringHelper(r'UserDTO')
           ..add('id', id)
           ..add('login', login)
-          ..add('role', role)
+          ..add('roleName', roleName)
           ..add('lastName', lastName)
           ..add('firstName', firstName)
           ..add('patronymic', patronymic)
@@ -112,9 +112,9 @@ class UserDTOBuilder implements Builder<UserDTO, UserDTOBuilder> {
   String? get login => _$this._login;
   set login(String? login) => _$this._login = login;
 
-  String? _role;
-  String? get role => _$this._role;
-  set role(String? role) => _$this._role = role;
+  String? _roleName;
+  String? get roleName => _$this._roleName;
+  set roleName(String? roleName) => _$this._roleName = roleName;
 
   String? _lastName;
   String? get lastName => _$this._lastName;
@@ -153,7 +153,7 @@ class UserDTOBuilder implements Builder<UserDTO, UserDTOBuilder> {
     if ($v != null) {
       _id = $v.id;
       _login = $v.login;
-      _role = $v.role;
+      _roleName = $v.roleName;
       _lastName = $v.lastName;
       _firstName = $v.firstName;
       _patronymic = $v.patronymic;
@@ -185,7 +185,7 @@ class UserDTOBuilder implements Builder<UserDTO, UserDTOBuilder> {
         new _$UserDTO._(
           id: id,
           login: login,
-          role: role,
+          roleName: roleName,
           lastName: lastName,
           firstName: firstName,
           patronymic: patronymic,

@@ -66,7 +66,11 @@ Future<void> persistTokens(oauth2.Client client) async {
   Future<UserProfile?> getCurrentUser() => _userService.getUserProfile();
   Future<String?> getCurrentUserName() => _userService.getUserName();
 
-  Future<String?> getAccessToken() => _storage.read(key: 'access_token');
+  // Future<String?> getAccessToken() => _storage.read(key: 'access_token');
+  Future<String> getAccessToken() async { // Возвращает String, а не String?
+  final token = await _storage.read(key: 'access_token');
+  return token ?? '';
+}
   Future<String?> getRefreshToken() => _storage.read(key: 'refresh_token');
   Future<String?> getIdToken() => _storage.read(key: 'id_token');
 }

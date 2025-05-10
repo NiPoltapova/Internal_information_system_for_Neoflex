@@ -73,8 +73,9 @@ Class | Method | HTTP request | Description
 [*BookingControllerApi*](doc/BookingControllerApi.md) | [**getBookingById**](doc/BookingControllerApi.md#getbookingbyid) | **GET** /api/bookings/{id} | 
 [*ChatControllerApi*](doc/ChatControllerApi.md) | [**createChat**](doc/ChatControllerApi.md#createchat) | **POST** /api/chats | 
 [*ChatControllerApi*](doc/ChatControllerApi.md) | [**deleteChat**](doc/ChatControllerApi.md#deletechat) | **DELETE** /api/chats/{id} | 
-[*ChatControllerApi*](doc/ChatControllerApi.md) | [**getAllChats**](doc/ChatControllerApi.md#getallchats) | **GET** /api/chats | 
 [*ChatControllerApi*](doc/ChatControllerApi.md) | [**getChatById**](doc/ChatControllerApi.md#getchatbyid) | **GET** /api/chats/{id} | 
+[*ChatControllerApi*](doc/ChatControllerApi.md) | [**getMyChats**](doc/ChatControllerApi.md#getmychats) | **GET** /api/chats/my | 
+[*ChatControllerApi*](doc/ChatControllerApi.md) | [**updateChat**](doc/ChatControllerApi.md#updatechat) | **PUT** /api/chats/{id} | 
 [*CommentControllerApi*](doc/CommentControllerApi.md) | [**createComment**](doc/CommentControllerApi.md#createcomment) | **POST** /api/posts/{postId}/comments | 
 [*CommentControllerApi*](doc/CommentControllerApi.md) | [**deleteComment**](doc/CommentControllerApi.md#deletecomment) | **DELETE** /api/posts/{postId}/comments/{commentId} | 
 [*CommentControllerApi*](doc/CommentControllerApi.md) | [**getComment**](doc/CommentControllerApi.md#getcomment) | **GET** /api/posts/{postId}/comments/{commentId} | 
@@ -103,6 +104,7 @@ Class | Method | HTTP request | Description
 [*RepostControllerApi*](doc/RepostControllerApi.md) | [**getRepostById**](doc/RepostControllerApi.md#getrepostbyid) | **GET** /api/reposts/{id} | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**adminCreateUser**](doc/UserControllerApi.md#admincreateuser) | **POST** /api/users | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**adminDeleteUser**](doc/UserControllerApi.md#admindeleteuser) | **DELETE** /api/users/{id} | 
+[*UserControllerApi*](doc/UserControllerApi.md) | [**adminUpdateUser**](doc/UserControllerApi.md#adminupdateuser) | **PUT** /api/users/{id} | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**getAllUsers**](doc/UserControllerApi.md#getallusers) | **GET** /api/users | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**getCurrentUser**](doc/UserControllerApi.md#getcurrentuser) | **GET** /api/users/me | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**getUserById**](doc/UserControllerApi.md#getuserbyid) | **GET** /api/users/{id} | 
@@ -121,12 +123,14 @@ Class | Method | HTTP request | Description
 
  - [BookingDTO](doc/BookingDTO.md)
  - [ChatDTO](doc/ChatDTO.md)
+ - [ChatSummaryDTO](doc/ChatSummaryDTO.md)
  - [CommentDTO](doc/CommentDTO.md)
  - [FileDTO](doc/FileDTO.md)
  - [LikeDTO](doc/LikeDTO.md)
  - [MediaDTO](doc/MediaDTO.md)
  - [MessageDTO](doc/MessageDTO.md)
  - [PageBookingDTO](doc/PageBookingDTO.md)
+ - [PageChatSummaryDTO](doc/PageChatSummaryDTO.md)
  - [PageLikeDTO](doc/PageLikeDTO.md)
  - [PageUserDTO](doc/PageUserDTO.md)
  - [Pageable](doc/Pageable.md)
@@ -135,8 +139,8 @@ Class | Method | HTTP request | Description
  - [RepostDTO](doc/RepostDTO.md)
  - [SortObject](doc/SortObject.md)
  - [UploadAvatarRequest](doc/UploadAvatarRequest.md)
- - [UserCreateRequestDTO](doc/UserCreateRequestDTO.md)
  - [UserDTO](doc/UserDTO.md)
+ - [UserExtendedDTO](doc/UserExtendedDTO.md)
  - [WorkspaceDTO](doc/WorkspaceDTO.md)
 
 

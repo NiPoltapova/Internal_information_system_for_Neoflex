@@ -5,14 +5,14 @@
 // ignore_for_file: unused_element
 import 'package:built_collection/built_collection.dart';
 import 'package:openapi/src/model/pageable_object.dart';
-import 'package:openapi/src/model/booking_dto.dart';
+import 'package:openapi/src/model/chat_summary_dto.dart';
 import 'package:openapi/src/model/sort_object.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'page_booking_dto.g.dart';
+part 'page_chat_summary_dto.g.dart';
 
-/// PageBookingDTO
+/// PageChatSummaryDTO
 ///
 /// Properties:
 /// * [totalElements] 
@@ -27,7 +27,7 @@ part 'page_booking_dto.g.dart';
 /// * [pageable] 
 /// * [empty] 
 @BuiltValue()
-abstract class PageBookingDTO implements Built<PageBookingDTO, PageBookingDTOBuilder> {
+abstract class PageChatSummaryDTO implements Built<PageChatSummaryDTO, PageChatSummaryDTOBuilder> {
   @BuiltValueField(wireName: r'totalElements')
   int? get totalElements;
 
@@ -44,7 +44,7 @@ abstract class PageBookingDTO implements Built<PageBookingDTO, PageBookingDTOBui
   int? get size;
 
   @BuiltValueField(wireName: r'content')
-  BuiltList<BookingDTO>? get content;
+  BuiltList<ChatSummaryDTO>? get content;
 
   @BuiltValueField(wireName: r'number')
   int? get number;
@@ -61,27 +61,27 @@ abstract class PageBookingDTO implements Built<PageBookingDTO, PageBookingDTOBui
   @BuiltValueField(wireName: r'empty')
   bool? get empty;
 
-  PageBookingDTO._();
+  PageChatSummaryDTO._();
 
-  factory PageBookingDTO([void updates(PageBookingDTOBuilder b)]) = _$PageBookingDTO;
+  factory PageChatSummaryDTO([void updates(PageChatSummaryDTOBuilder b)]) = _$PageChatSummaryDTO;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(PageBookingDTOBuilder b) => b;
+  static void _defaults(PageChatSummaryDTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<PageBookingDTO> get serializer => _$PageBookingDTOSerializer();
+  static Serializer<PageChatSummaryDTO> get serializer => _$PageChatSummaryDTOSerializer();
 }
 
-class _$PageBookingDTOSerializer implements PrimitiveSerializer<PageBookingDTO> {
+class _$PageChatSummaryDTOSerializer implements PrimitiveSerializer<PageChatSummaryDTO> {
   @override
-  final Iterable<Type> types = const [PageBookingDTO, _$PageBookingDTO];
+  final Iterable<Type> types = const [PageChatSummaryDTO, _$PageChatSummaryDTO];
 
   @override
-  final String wireName = r'PageBookingDTO';
+  final String wireName = r'PageChatSummaryDTO';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    PageBookingDTO object, {
+    PageChatSummaryDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
     if (object.totalElements != null) {
@@ -123,7 +123,7 @@ class _$PageBookingDTOSerializer implements PrimitiveSerializer<PageBookingDTO> 
       yield r'content';
       yield serializers.serialize(
         object.content,
-        specifiedType: const FullType(BuiltList, [FullType(BookingDTO)]),
+        specifiedType: const FullType(BuiltList, [FullType(ChatSummaryDTO)]),
       );
     }
     if (object.number != null) {
@@ -166,7 +166,7 @@ class _$PageBookingDTOSerializer implements PrimitiveSerializer<PageBookingDTO> 
   @override
   Object serialize(
     Serializers serializers,
-    PageBookingDTO object, {
+    PageChatSummaryDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
@@ -177,7 +177,7 @@ class _$PageBookingDTOSerializer implements PrimitiveSerializer<PageBookingDTO> 
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required PageBookingDTOBuilder result,
+    required PageChatSummaryDTOBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
@@ -222,8 +222,8 @@ class _$PageBookingDTOSerializer implements PrimitiveSerializer<PageBookingDTO> 
         case r'content':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(BookingDTO)]),
-          ) as BuiltList<BookingDTO>;
+            specifiedType: const FullType(BuiltList, [FullType(ChatSummaryDTO)]),
+          ) as BuiltList<ChatSummaryDTO>;
           result.content.replace(valueDes);
           break;
         case r'number':
@@ -270,12 +270,12 @@ class _$PageBookingDTOSerializer implements PrimitiveSerializer<PageBookingDTO> 
   }
 
   @override
-  PageBookingDTO deserialize(
+  PageChatSummaryDTO deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = PageBookingDTOBuilder();
+    final result = PageChatSummaryDTOBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(

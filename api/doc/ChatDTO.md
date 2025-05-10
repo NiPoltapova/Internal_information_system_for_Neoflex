@@ -12,7 +12,9 @@ Name | Type | Description | Notes
 **chatType** | **String** |  | [optional] 
 **chatName** | **String** |  | [optional] 
 **createdWhen** | [**DateTime**](DateTime.md) |  | [optional] 
-**createdBy** | **int** |  | [optional] 
+**createdBy** | **int** |  | 
+**participantIds** | **BuiltList&lt;int&gt;** |  | [optional] 
+**otherUserId** | **int** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

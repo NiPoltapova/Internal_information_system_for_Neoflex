@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **int** |  | [optional] 
 **login** | **String** |  | [optional] 
-**role** | **String** |  | [optional] 
+**roleName** | **String** |  | [optional] 
 **lastName** | **String** |  | [optional] 
 **firstName** | **String** |  | [optional] 
 **patronymic** | **String** |  | [optional] 

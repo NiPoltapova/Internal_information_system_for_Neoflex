@@ -7,23 +7,33 @@ void main() {
   final instance = Openapi().getCommentControllerApi();
 
   group(CommentControllerApi, () {
-    //Future<CommentDTO> createComment(CommentDTO commentDTO) async
+    //Future<CommentDTO> createComment(int postId, CommentDTO commentDTO) async
     test('test createComment', () async {
       // TODO
     });
 
-    //Future deleteComment(int id) async
+    //Future deleteComment(int postId, int commentId) async
     test('test deleteComment', () async {
       // TODO
     });
 
-    //Future<BuiltList<CommentDTO>> getAllComments() async
-    test('test getAllComments', () async {
+    //Future<CommentDTO> getComment(int postId, int commentId) async
+    test('test getComment', () async {
       // TODO
     });
 
-    //Future<CommentDTO> getCommentById(int id) async
-    test('test getCommentById', () async {
+    //Future<int> getCommentCount(int postId) async
+    test('test getCommentCount', () async {
+      // TODO
+    });
+
+    //Future<BuiltList<CommentDTO>> getComments(int postId) async
+    test('test getComments', () async {
+      // TODO
+    });
+
+    //Future<CommentDTO> updateComment(int postId, int commentId, CommentDTO commentDTO) async
+    test('test updateComment', () async {
       // TODO
     });
 

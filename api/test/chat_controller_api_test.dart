@@ -17,13 +17,18 @@ void main() {
       // TODO
     });
 
-    //Future<BuiltList<ChatDTO>> getAllChats() async
-    test('test getAllChats', () async {
+    //Future<ChatDTO> getChatById(int id) async
+    test('test getChatById', () async {
       // TODO
     });
 
-    //Future<ChatDTO> getChatById(int id) async
-    test('test getChatById', () async {
+    //Future<PageChatSummaryDTO> getMyChats({ int page, int size, String search }) async
+    test('test getMyChats', () async {
+      // TODO
+    });
+
+    //Future<ChatDTO> updateChat(int id, ChatDTO chatDTO) async
+    test('test updateChat', () async {
       // TODO
     });
 

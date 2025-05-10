@@ -7,27 +7,32 @@ import 'package:openapi/src/model/date.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'user_create_request_dto.g.dart';
+part 'user_extended_dto.g.dart';
 
-/// UserCreateRequestDTO
+/// UserExtendedDTO
 ///
 /// Properties:
+/// * [id] 
 /// * [login] 
-/// * [role] 
+/// * [roleName] 
 /// * [lastName] 
 /// * [firstName] 
 /// * [patronymic] 
 /// * [appointment] 
 /// * [birthday] 
+/// * [avatarUrl] 
 /// * [phoneNumber] 
 /// * [password] 
 @BuiltValue()
-abstract class UserCreateRequestDTO implements Built<UserCreateRequestDTO, UserCreateRequestDTOBuilder> {
+abstract class UserExtendedDTO implements Built<UserExtendedDTO, UserExtendedDTOBuilder> {
+  @BuiltValueField(wireName: r'id')
+  int? get id;
+
   @BuiltValueField(wireName: r'login')
   String? get login;
 
-  @BuiltValueField(wireName: r'role')
-  String? get role;
+  @BuiltValueField(wireName: r'roleName')
+  String? get roleName;
 
   @BuiltValueField(wireName: r'lastName')
   String? get lastName;
@@ -44,35 +49,45 @@ abstract class UserCreateRequestDTO implements Built<UserCreateRequestDTO, UserC
   @BuiltValueField(wireName: r'birthday')
   Date? get birthday;
 
+  @BuiltValueField(wireName: r'avatarUrl')
+  String? get avatarUrl;
+
   @BuiltValueField(wireName: r'phoneNumber')
   String? get phoneNumber;
 
   @BuiltValueField(wireName: r'password')
   String? get password;
 
-  UserCreateRequestDTO._();
+  UserExtendedDTO._();
 
-  factory UserCreateRequestDTO([void updates(UserCreateRequestDTOBuilder b)]) = _$UserCreateRequestDTO;
+  factory UserExtendedDTO([void updates(UserExtendedDTOBuilder b)]) = _$UserExtendedDTO;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(UserCreateRequestDTOBuilder b) => b;
+  static void _defaults(UserExtendedDTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<UserCreateRequestDTO> get serializer => _$UserCreateRequestDTOSerializer();
+  static Serializer<UserExtendedDTO> get serializer => _$UserExtendedDTOSerializer();
 }
 
-class _$UserCreateRequestDTOSerializer implements PrimitiveSerializer<UserCreateRequestDTO> {
+class _$UserExtendedDTOSerializer implements PrimitiveSerializer<UserExtendedDTO> {
   @override
-  final Iterable<Type> types = const [UserCreateRequestDTO, _$UserCreateRequestDTO];
+  final Iterable<Type> types = const [UserExtendedDTO, _$UserExtendedDTO];
 
   @override
-  final String wireName = r'UserCreateRequestDTO';
+  final String wireName = r'UserExtendedDTO';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    UserCreateRequestDTO object, {
+    UserExtendedDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
+    if (object.id != null) {
+      yield r'id';
+      yield serializers.serialize(
+        object.id,
+        specifiedType: const FullType(int),
+      );
+    }
     if (object.login != null) {
       yield r'login';
       yield serializers.serialize(
@@ -80,10 +95,10 @@ class _$UserCreateRequestDTOSerializer implements PrimitiveSerializer<UserCreate
         specifiedType: const FullType(String),
       );
     }
-    if (object.role != null) {
-      yield r'role';
+    if (object.roleName != null) {
+      yield r'roleName';
       yield serializers.serialize(
-        object.role,
+        object.roleName,
         specifiedType: const FullType(String),
       );
     }
@@ -122,6 +137,13 @@ class _$UserCreateRequestDTOSerializer implements PrimitiveSerializer<UserCreate
         specifiedType: const FullType(Date),
       );
     }
+    if (object.avatarUrl != null) {
+      yield r'avatarUrl';
+      yield serializers.serialize(
+        object.avatarUrl,
+        specifiedType: const FullType(String),
+      );
+    }
     if (object.phoneNumber != null) {
       yield r'phoneNumber';
       yield serializers.serialize(
@@ -141,7 +163,7 @@ class _$UserCreateRequestDTOSerializer implements PrimitiveSerializer<UserCreate
   @override
   Object serialize(
     Serializers serializers,
-    UserCreateRequestDTO object, {
+    UserExtendedDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
@@ -152,13 +174,20 @@ class _$UserCreateRequestDTOSerializer implements PrimitiveSerializer<UserCreate
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required UserCreateRequestDTOBuilder result,
+    required UserExtendedDTOBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
+        case r'id':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(int),
+          ) as int;
+          result.id = valueDes;
+          break;
         case r'login':
           final valueDes = serializers.deserialize(
             value,
@@ -166,12 +195,12 @@ class _$UserCreateRequestDTOSerializer implements PrimitiveSerializer<UserCreate
           ) as String;
           result.login = valueDes;
           break;
-        case r'role':
+        case r'roleName':
           final valueDes = serializers.deserialize(
             value,
             specifiedType: const FullType(String),
           ) as String;
-          result.role = valueDes;
+          result.roleName = valueDes;
           break;
         case r'lastName':
           final valueDes = serializers.deserialize(
@@ -208,6 +237,13 @@ class _$UserCreateRequestDTOSerializer implements PrimitiveSerializer<UserCreate
           ) as Date;
           result.birthday = valueDes;
           break;
+        case r'avatarUrl':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(String),
+          ) as String;
+          result.avatarUrl = valueDes;
+          break;
         case r'phoneNumber':
           final valueDes = serializers.deserialize(
             value,
@@ -231,12 +267,12 @@ class _$UserCreateRequestDTOSerializer implements PrimitiveSerializer<UserCreate
   }
 
   @override
-  UserCreateRequestDTO deserialize(
+  UserExtendedDTO deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = UserCreateRequestDTOBuilder();
+    final result = UserExtendedDTOBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(

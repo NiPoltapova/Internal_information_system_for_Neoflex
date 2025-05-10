@@ -11,8 +11,9 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createChat**](ChatControllerApi.md#createchat) | **POST** /api/chats | 
 [**deleteChat**](ChatControllerApi.md#deletechat) | **DELETE** /api/chats/{id} | 
-[**getAllChats**](ChatControllerApi.md#getallchats) | **GET** /api/chats | 
 [**getChatById**](ChatControllerApi.md#getchatbyid) | **GET** /api/chats/{id} | 
+[**getMyChats**](ChatControllerApi.md#getmychats) | **GET** /api/chats/my | 
+[**updateChat**](ChatControllerApi.md#updatechat) | **PUT** /api/chats/{id} | 
 
 
 # **createChat**
@@ -96,43 +97,6 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getAllChats**
-> BuiltList<ChatDTO> getAllChats()
-
-
-
-### Example
-```dart
-import 'package:openapi/api.dart';
-
-final api = Openapi().getChatControllerApi();
-
-try {
-    final response = api.getAllChats();
-    print(response);
-} catch on DioException (e) {
-    print('Exception when calling ChatControllerApi->getAllChats: $e\n');
-}
-```
-
-### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-[**BuiltList&lt;ChatDTO&gt;**](ChatDTO.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: */*
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **getChatById**
 > ChatDTO getChatById(id)
 
@@ -170,6 +134,94 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getMyChats**
+> PageChatSummaryDTO getMyChats(page, size, search)
+
+
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getChatControllerApi();
+final int page = 56; // int | 
+final int size = 56; // int | 
+final String search = search_example; // String | 
+
+try {
+    final response = api.getMyChats(page, size, search);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling ChatControllerApi->getMyChats: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **page** | **int**|  | [optional] [default to 0]
+ **size** | **int**|  | [optional] [default to 10]
+ **search** | **String**|  | [optional] 
+
+### Return type
+
+[**PageChatSummaryDTO**](PageChatSummaryDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **updateChat**
+> ChatDTO updateChat(id, chatDTO)
+
+
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getChatControllerApi();
+final int id = 789; // int | 
+final ChatDTO chatDTO = ; // ChatDTO | 
+
+try {
+    final response = api.updateChat(id, chatDTO);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling ChatControllerApi->updateChat: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **int**|  | 
+ **chatDTO** | [**ChatDTO**](ChatDTO.md)|  | 
+
+### Return type
+
+[**ChatDTO**](ChatDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

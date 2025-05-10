@@ -1,4 +1,4 @@
-# openapi.model.PageBookingDTO
+# openapi.model.PageChatSummaryDTO
 
 ## Load the model package
 ```dart
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **first** | **bool** |  | [optional] 
 **last** | **bool** |  | [optional] 
 **size** | **int** |  | [optional] 
-**content** | [**BuiltList&lt;BookingDTO&gt;**](BookingDTO.md) |  | [optional] 
+**content** | [**BuiltList&lt;ChatSummaryDTO&gt;**](ChatSummaryDTO.md) |  | [optional] 
 **number** | **int** |  | [optional] 
 **sort** | [**SortObject**](SortObject.md) |  | [optional] 
 **numberOfElements** | **int** |  | [optional] 

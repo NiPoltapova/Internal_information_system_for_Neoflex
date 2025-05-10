@@ -3,24 +3,22 @@
 //
 
 // ignore_for_file: unused_element
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'chat_dto.g.dart';
+part 'chat_summary_dto.g.dart';
 
-/// ChatDTO
+/// ChatSummaryDTO
 ///
 /// Properties:
 /// * [id] 
 /// * [chatType] 
 /// * [chatName] 
-/// * [createdWhen] 
-/// * [createdBy] 
-/// * [participantIds] 
-/// * [otherUserId] 
+/// * [lastActivity] 
+/// * [unreadCount] 
+/// * [lastMessagePreview] 
 @BuiltValue()
-abstract class ChatDTO implements Built<ChatDTO, ChatDTOBuilder> {
+abstract class ChatSummaryDTO implements Built<ChatSummaryDTO, ChatSummaryDTOBuilder> {
   @BuiltValueField(wireName: r'id')
   int? get id;
 
@@ -30,39 +28,36 @@ abstract class ChatDTO implements Built<ChatDTO, ChatDTOBuilder> {
   @BuiltValueField(wireName: r'chatName')
   String? get chatName;
 
-  @BuiltValueField(wireName: r'createdWhen')
-  DateTime? get createdWhen;
+  @BuiltValueField(wireName: r'lastActivity')
+  DateTime? get lastActivity;
 
-  @BuiltValueField(wireName: r'createdBy')
-  int get createdBy;
+  @BuiltValueField(wireName: r'unreadCount')
+  int? get unreadCount;
 
-  @BuiltValueField(wireName: r'participantIds')
-  BuiltList<int>? get participantIds;
+  @BuiltValueField(wireName: r'lastMessagePreview')
+  String? get lastMessagePreview;
 
-  @BuiltValueField(wireName: r'otherUserId')
-  int? get otherUserId;
+  ChatSummaryDTO._();
 
-  ChatDTO._();
-
-  factory ChatDTO([void updates(ChatDTOBuilder b)]) = _$ChatDTO;
+  factory ChatSummaryDTO([void updates(ChatSummaryDTOBuilder b)]) = _$ChatSummaryDTO;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(ChatDTOBuilder b) => b;
+  static void _defaults(ChatSummaryDTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ChatDTO> get serializer => _$ChatDTOSerializer();
+  static Serializer<ChatSummaryDTO> get serializer => _$ChatSummaryDTOSerializer();
 }
 
-class _$ChatDTOSerializer implements PrimitiveSerializer<ChatDTO> {
+class _$ChatSummaryDTOSerializer implements PrimitiveSerializer<ChatSummaryDTO> {
   @override
-  final Iterable<Type> types = const [ChatDTO, _$ChatDTO];
+  final Iterable<Type> types = const [ChatSummaryDTO, _$ChatSummaryDTO];
 
   @override
-  final String wireName = r'ChatDTO';
+  final String wireName = r'ChatSummaryDTO';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    ChatDTO object, {
+    ChatSummaryDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
     if (object.id != null) {
@@ -86,30 +81,25 @@ class _$ChatDTOSerializer implements PrimitiveSerializer<ChatDTO> {
         specifiedType: const FullType(String),
       );
     }
-    if (object.createdWhen != null) {
-      yield r'createdWhen';
+    if (object.lastActivity != null) {
+      yield r'lastActivity';
       yield serializers.serialize(
-        object.createdWhen,
+        object.lastActivity,
         specifiedType: const FullType(DateTime),
       );
     }
-    yield r'createdBy';
-    yield serializers.serialize(
-      object.createdBy,
-      specifiedType: const FullType(int),
-    );
-    if (object.participantIds != null) {
-      yield r'participantIds';
+    if (object.unreadCount != null) {
+      yield r'unreadCount';
       yield serializers.serialize(
-        object.participantIds,
-        specifiedType: const FullType(BuiltList, [FullType(int)]),
+        object.unreadCount,
+        specifiedType: const FullType(int),
       );
     }
-    if (object.otherUserId != null) {
-      yield r'otherUserId';
+    if (object.lastMessagePreview != null) {
+      yield r'lastMessagePreview';
       yield serializers.serialize(
-        object.otherUserId,
-        specifiedType: const FullType(int),
+        object.lastMessagePreview,
+        specifiedType: const FullType(String),
       );
     }
   }
@@ -117,7 +107,7 @@ class _$ChatDTOSerializer implements PrimitiveSerializer<ChatDTO> {
   @override
   Object serialize(
     Serializers serializers,
-    ChatDTO object, {
+    ChatSummaryDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
@@ -128,7 +118,7 @@ class _$ChatDTOSerializer implements PrimitiveSerializer<ChatDTO> {
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required ChatDTOBuilder result,
+    required ChatSummaryDTOBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
@@ -156,33 +146,26 @@ class _$ChatDTOSerializer implements PrimitiveSerializer<ChatDTO> {
           ) as String;
           result.chatName = valueDes;
           break;
-        case r'createdWhen':
+        case r'lastActivity':
           final valueDes = serializers.deserialize(
             value,
             specifiedType: const FullType(DateTime),
           ) as DateTime;
-          result.createdWhen = valueDes;
+          result.lastActivity = valueDes;
           break;
-        case r'createdBy':
+        case r'unreadCount':
           final valueDes = serializers.deserialize(
             value,
             specifiedType: const FullType(int),
           ) as int;
-          result.createdBy = valueDes;
+          result.unreadCount = valueDes;
           break;
-        case r'participantIds':
+        case r'lastMessagePreview':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(int)]),
-          ) as BuiltList<int>;
-          result.participantIds.replace(valueDes);
-          break;
-        case r'otherUserId':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
-          result.otherUserId = valueDes;
+            specifiedType: const FullType(String),
+          ) as String;
+          result.lastMessagePreview = valueDes;
           break;
         default:
           unhandled.add(key);
@@ -193,12 +176,12 @@ class _$ChatDTOSerializer implements PrimitiveSerializer<ChatDTO> {
   }
 
   @override
-  ChatDTO deserialize(
+  ChatSummaryDTO deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = ChatDTOBuilder();
+    final result = ChatSummaryDTOBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(

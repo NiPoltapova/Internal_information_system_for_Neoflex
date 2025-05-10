@@ -17,8 +17,8 @@ void main() {
       // TODO
     });
 
-    // String role
-    test('to test the property `role`', () async {
+    // String roleName
+    test('to test the property `roleName`', () async {
       // TODO
     });
 

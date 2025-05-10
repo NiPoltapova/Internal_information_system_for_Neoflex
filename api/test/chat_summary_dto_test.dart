@@ -1,12 +1,12 @@
 import 'package:test/test.dart';
 import 'package:openapi/openapi.dart';
 
-// tests for ChatDTO
+// tests for ChatSummaryDTO
 void main() {
-  final instance = ChatDTOBuilder();
+  final instance = ChatSummaryDTOBuilder();
   // TODO add properties to the builder and call build()
 
-  group(ChatDTO, () {
+  group(ChatSummaryDTO, () {
     // int id
     test('to test the property `id`', () async {
       // TODO
@@ -22,23 +22,18 @@ void main() {
       // TODO
     });
 
-    // DateTime createdWhen
-    test('to test the property `createdWhen`', () async {
+    // DateTime lastActivity
+    test('to test the property `lastActivity`', () async {
       // TODO
     });
 
-    // int createdBy
-    test('to test the property `createdBy`', () async {
+    // int unreadCount
+    test('to test the property `unreadCount`', () async {
       // TODO
     });
 
-    // BuiltList<int> participantIds
-    test('to test the property `participantIds`', () async {
-      // TODO
-    });
-
-    // int otherUserId
-    test('to test the property `otherUserId`', () async {
+    // String lastMessagePreview
+    test('to test the property `lastMessagePreview`', () async {
       // TODO
     });
 

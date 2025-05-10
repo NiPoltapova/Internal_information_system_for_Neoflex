@@ -22,13 +22,13 @@ void main() {
       // TODO
     });
 
-    // bool paged
-    test('to test the property `paged`', () async {
+    // int pageNumber
+    test('to test the property `pageNumber`', () async {
       // TODO
     });
 
-    // int pageNumber
-    test('to test the property `pageNumber`', () async {
+    // bool paged
+    test('to test the property `paged`', () async {
       // TODO
     });
 

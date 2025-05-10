@@ -11,6 +11,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**adminCreateUser**](UserControllerApi.md#admincreateuser) | **POST** /api/users | 
 [**adminDeleteUser**](UserControllerApi.md#admindeleteuser) | **DELETE** /api/users/{id} | 
+[**adminUpdateUser**](UserControllerApi.md#adminupdateuser) | **PUT** /api/users/{id} | 
 [**getAllUsers**](UserControllerApi.md#getallusers) | **GET** /api/users | 
 [**getCurrentUser**](UserControllerApi.md#getcurrentuser) | **GET** /api/users/me | 
 [**getUserById**](UserControllerApi.md#getuserbyid) | **GET** /api/users/{id} | 
@@ -20,7 +21,7 @@ Method | HTTP request | Description
 
 
 # **adminCreateUser**
-> UserDTO adminCreateUser(userCreateRequestDTO)
+> UserDTO adminCreateUser(userExtendedDTO)
 
 
 
@@ -29,10 +30,10 @@ Method | HTTP request | Description
 import 'package:openapi/api.dart';
 
 final api = Openapi().getUserControllerApi();
-final UserCreateRequestDTO userCreateRequestDTO = ; // UserCreateRequestDTO | 
+final UserExtendedDTO userExtendedDTO = ; // UserExtendedDTO | 
 
 try {
-    final response = api.adminCreateUser(userCreateRequestDTO);
+    final response = api.adminCreateUser(userExtendedDTO);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling UserControllerApi->adminCreateUser: $e\n');
@@ -43,7 +44,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userCreateRequestDTO** | [**UserCreateRequestDTO**](UserCreateRequestDTO.md)|  | 
+ **userExtendedDTO** | [**UserExtendedDTO**](UserExtendedDTO.md)|  | 
 
 ### Return type
 
@@ -97,6 +98,49 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **adminUpdateUser**
+> UserDTO adminUpdateUser(id, userExtendedDTO)
+
+
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getUserControllerApi();
+final int id = 789; // int | 
+final UserExtendedDTO userExtendedDTO = ; // UserExtendedDTO | 
+
+try {
+    final response = api.adminUpdateUser(id, userExtendedDTO);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling UserControllerApi->adminUpdateUser: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **int**|  | 
+ **userExtendedDTO** | [**UserExtendedDTO**](UserExtendedDTO.md)|  | 
+
+### Return type
+
+[**UserDTO**](UserDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

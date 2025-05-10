@@ -7,13 +7,18 @@ void main() {
   final instance = Openapi().getUserControllerApi();
 
   group(UserControllerApi, () {
-    //Future<UserDTO> adminCreateUser(UserDTO userDTO) async
+    //Future<UserDTO> adminCreateUser(UserExtendedDTO userExtendedDTO) async
     test('test adminCreateUser', () async {
       // TODO
     });
 
     //Future adminDeleteUser(int id) async
     test('test adminDeleteUser', () async {
+      // TODO
+    });
+
+    //Future<UserDTO> adminUpdateUser(int id, UserExtendedDTO userExtendedDTO) async
+    test('test adminUpdateUser', () async {
       // TODO
     });
 

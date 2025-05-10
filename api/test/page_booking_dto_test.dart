@@ -17,6 +17,16 @@ void main() {
       // TODO
     });
 
+    // bool first
+    test('to test the property `first`', () async {
+      // TODO
+    });
+
+    // bool last
+    test('to test the property `last`', () async {
+      // TODO
+    });
+
     // int size
     test('to test the property `size`', () async {
       // TODO
@@ -34,16 +44,6 @@ void main() {
 
     // SortObject sort
     test('to test the property `sort`', () async {
-      // TODO
-    });
-
-    // bool first
-    test('to test the property `first`', () async {
-      // TODO
-    });
-
-    // bool last
-    test('to test the property `last`', () async {
       // TODO
     });
 

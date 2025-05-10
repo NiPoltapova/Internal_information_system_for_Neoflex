@@ -14,7 +14,7 @@ part 'user_dto.g.dart';
 /// Properties:
 /// * [id] 
 /// * [login] 
-/// * [role] 
+/// * [roleName] 
 /// * [lastName] 
 /// * [firstName] 
 /// * [patronymic] 
@@ -30,8 +30,8 @@ abstract class UserDTO implements Built<UserDTO, UserDTOBuilder> {
   @BuiltValueField(wireName: r'login')
   String? get login;
 
-  @BuiltValueField(wireName: r'role')
-  String? get role;
+  @BuiltValueField(wireName: r'roleName')
+  String? get roleName;
 
   @BuiltValueField(wireName: r'lastName')
   String? get lastName;
@@ -91,10 +91,10 @@ class _$UserDTOSerializer implements PrimitiveSerializer<UserDTO> {
         specifiedType: const FullType(String),
       );
     }
-    if (object.role != null) {
-      yield r'role';
+    if (object.roleName != null) {
+      yield r'roleName';
       yield serializers.serialize(
-        object.role,
+        object.roleName,
         specifiedType: const FullType(String),
       );
     }
@@ -184,12 +184,12 @@ class _$UserDTOSerializer implements PrimitiveSerializer<UserDTO> {
           ) as String;
           result.login = valueDes;
           break;
-        case r'role':
+        case r'roleName':
           final valueDes = serializers.deserialize(
             value,
             specifiedType: const FullType(String),
           ) as String;
-          result.role = valueDes;
+          result.roleName = valueDes;
           break;
         case r'lastName':
           final valueDes = serializers.deserialize(

@@ -16,14 +16,26 @@ class _$ChatDTO extends ChatDTO {
   @override
   final DateTime? createdWhen;
   @override
-  final int? createdBy;
+  final int createdBy;
+  @override
+  final BuiltList<int>? participantIds;
+  @override
+  final int? otherUserId;
 
   factory _$ChatDTO([void Function(ChatDTOBuilder)? updates]) =>
       (new ChatDTOBuilder()..update(updates))._build();
 
   _$ChatDTO._(
-      {this.id, this.chatType, this.chatName, this.createdWhen, this.createdBy})
-      : super._();
+      {this.id,
+      this.chatType,
+      this.chatName,
+      this.createdWhen,
+      required this.createdBy,
+      this.participantIds,
+      this.otherUserId})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(createdBy, r'ChatDTO', 'createdBy');
+  }
 
   @override
   ChatDTO rebuild(void Function(ChatDTOBuilder) updates) =>
@@ -40,7 +52,9 @@ class _$ChatDTO extends ChatDTO {
         chatType == other.chatType &&
         chatName == other.chatName &&
         createdWhen == other.createdWhen &&
-        createdBy == other.createdBy;
+        createdBy == other.createdBy &&
+        participantIds == other.participantIds &&
+        otherUserId == other.otherUserId;
   }
 
   @override
@@ -51,6 +65,8 @@ class _$ChatDTO extends ChatDTO {
     _$hash = $jc(_$hash, chatName.hashCode);
     _$hash = $jc(_$hash, createdWhen.hashCode);
     _$hash = $jc(_$hash, createdBy.hashCode);
+    _$hash = $jc(_$hash, participantIds.hashCode);
+    _$hash = $jc(_$hash, otherUserId.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -62,7 +78,9 @@ class _$ChatDTO extends ChatDTO {
           ..add('chatType', chatType)
           ..add('chatName', chatName)
           ..add('createdWhen', createdWhen)
-          ..add('createdBy', createdBy))
+          ..add('createdBy', createdBy)
+          ..add('participantIds', participantIds)
+          ..add('otherUserId', otherUserId))
         .toString();
   }
 }
@@ -90,6 +108,16 @@ class ChatDTOBuilder implements Builder<ChatDTO, ChatDTOBuilder> {
   int? get createdBy => _$this._createdBy;
   set createdBy(int? createdBy) => _$this._createdBy = createdBy;
 
+  ListBuilder<int>? _participantIds;
+  ListBuilder<int> get participantIds =>
+      _$this._participantIds ??= new ListBuilder<int>();
+  set participantIds(ListBuilder<int>? participantIds) =>
+      _$this._participantIds = participantIds;
+
+  int? _otherUserId;
+  int? get otherUserId => _$this._otherUserId;
+  set otherUserId(int? otherUserId) => _$this._otherUserId = otherUserId;
+
   ChatDTOBuilder() {
     ChatDTO._defaults(this);
   }
@@ -102,6 +130,8 @@ class ChatDTOBuilder implements Builder<ChatDTO, ChatDTOBuilder> {
       _chatName = $v.chatName;
       _createdWhen = $v.createdWhen;
       _createdBy = $v.createdBy;
+      _participantIds = $v.participantIds?.toBuilder();
+      _otherUserId = $v.otherUserId;
       _$v = null;
     }
     return this;
@@ -122,14 +152,30 @@ class ChatDTOBuilder implements Builder<ChatDTO, ChatDTOBuilder> {
   ChatDTO build() => _build();
 
   _$ChatDTO _build() {
-    final _$result = _$v ??
-        new _$ChatDTO._(
-          id: id,
-          chatType: chatType,
-          chatName: chatName,
-          createdWhen: createdWhen,
-          createdBy: createdBy,
-        );
+    _$ChatDTO _$result;
+    try {
+      _$result = _$v ??
+          new _$ChatDTO._(
+            id: id,
+            chatType: chatType,
+            chatName: chatName,
+            createdWhen: createdWhen,
+            createdBy: BuiltValueNullFieldError.checkNotNull(
+                createdBy, r'ChatDTO', 'createdBy'),
+            participantIds: _participantIds?.build(),
+            otherUserId: otherUserId,
+          );
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'participantIds';
+        _participantIds?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'ChatDTO', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

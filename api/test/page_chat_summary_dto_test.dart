@@ -1,12 +1,12 @@
 import 'package:test/test.dart';
 import 'package:openapi/openapi.dart';
 
-// tests for PageLikeDTO
+// tests for PageChatSummaryDTO
 void main() {
-  final instance = PageLikeDTOBuilder();
+  final instance = PageChatSummaryDTOBuilder();
   // TODO add properties to the builder and call build()
 
-  group(PageLikeDTO, () {
+  group(PageChatSummaryDTO, () {
     // int totalElements
     test('to test the property `totalElements`', () async {
       // TODO
@@ -32,7 +32,7 @@ void main() {
       // TODO
     });
 
-    // BuiltList<LikeDTO> content
+    // BuiltList<ChatSummaryDTO> content
     test('to test the property `content`', () async {
       // TODO
     });

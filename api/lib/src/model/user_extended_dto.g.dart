@@ -1,16 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_create_request_dto.dart';
+part of 'user_extended_dto.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$UserCreateRequestDTO extends UserCreateRequestDTO {
+class _$UserExtendedDTO extends UserExtendedDTO {
+  @override
+  final int? id;
   @override
   final String? login;
   @override
-  final String? role;
+  final String? roleName;
   @override
   final String? lastName;
   @override
@@ -22,46 +24,50 @@ class _$UserCreateRequestDTO extends UserCreateRequestDTO {
   @override
   final Date? birthday;
   @override
+  final String? avatarUrl;
+  @override
   final String? phoneNumber;
   @override
   final String? password;
 
-  factory _$UserCreateRequestDTO(
-          [void Function(UserCreateRequestDTOBuilder)? updates]) =>
-      (new UserCreateRequestDTOBuilder()..update(updates))._build();
+  factory _$UserExtendedDTO([void Function(UserExtendedDTOBuilder)? updates]) =>
+      (new UserExtendedDTOBuilder()..update(updates))._build();
 
-  _$UserCreateRequestDTO._(
-      {this.login,
-      this.role,
+  _$UserExtendedDTO._(
+      {this.id,
+      this.login,
+      this.roleName,
       this.lastName,
       this.firstName,
       this.patronymic,
       this.appointment,
       this.birthday,
+      this.avatarUrl,
       this.phoneNumber,
       this.password})
       : super._();
 
   @override
-  UserCreateRequestDTO rebuild(
-          void Function(UserCreateRequestDTOBuilder) updates) =>
+  UserExtendedDTO rebuild(void Function(UserExtendedDTOBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  UserCreateRequestDTOBuilder toBuilder() =>
-      new UserCreateRequestDTOBuilder()..replace(this);
+  UserExtendedDTOBuilder toBuilder() =>
+      new UserExtendedDTOBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is UserCreateRequestDTO &&
+    return other is UserExtendedDTO &&
+        id == other.id &&
         login == other.login &&
-        role == other.role &&
+        roleName == other.roleName &&
         lastName == other.lastName &&
         firstName == other.firstName &&
         patronymic == other.patronymic &&
         appointment == other.appointment &&
         birthday == other.birthday &&
+        avatarUrl == other.avatarUrl &&
         phoneNumber == other.phoneNumber &&
         password == other.password;
   }
@@ -69,13 +75,15 @@ class _$UserCreateRequestDTO extends UserCreateRequestDTO {
   @override
   int get hashCode {
     var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
     _$hash = $jc(_$hash, login.hashCode);
-    _$hash = $jc(_$hash, role.hashCode);
+    _$hash = $jc(_$hash, roleName.hashCode);
     _$hash = $jc(_$hash, lastName.hashCode);
     _$hash = $jc(_$hash, firstName.hashCode);
     _$hash = $jc(_$hash, patronymic.hashCode);
     _$hash = $jc(_$hash, appointment.hashCode);
     _$hash = $jc(_$hash, birthday.hashCode);
+    _$hash = $jc(_$hash, avatarUrl.hashCode);
     _$hash = $jc(_$hash, phoneNumber.hashCode);
     _$hash = $jc(_$hash, password.hashCode);
     _$hash = $jf(_$hash);
@@ -84,31 +92,37 @@ class _$UserCreateRequestDTO extends UserCreateRequestDTO {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'UserCreateRequestDTO')
+    return (newBuiltValueToStringHelper(r'UserExtendedDTO')
+          ..add('id', id)
           ..add('login', login)
-          ..add('role', role)
+          ..add('roleName', roleName)
           ..add('lastName', lastName)
           ..add('firstName', firstName)
           ..add('patronymic', patronymic)
           ..add('appointment', appointment)
           ..add('birthday', birthday)
+          ..add('avatarUrl', avatarUrl)
           ..add('phoneNumber', phoneNumber)
           ..add('password', password))
         .toString();
   }
 }
 
-class UserCreateRequestDTOBuilder
-    implements Builder<UserCreateRequestDTO, UserCreateRequestDTOBuilder> {
-  _$UserCreateRequestDTO? _$v;
+class UserExtendedDTOBuilder
+    implements Builder<UserExtendedDTO, UserExtendedDTOBuilder> {
+  _$UserExtendedDTO? _$v;
+
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
   String? _login;
   String? get login => _$this._login;
   set login(String? login) => _$this._login = login;
 
-  String? _role;
-  String? get role => _$this._role;
-  set role(String? role) => _$this._role = role;
+  String? _roleName;
+  String? get roleName => _$this._roleName;
+  set roleName(String? roleName) => _$this._roleName = roleName;
 
   String? _lastName;
   String? get lastName => _$this._lastName;
@@ -130,6 +144,10 @@ class UserCreateRequestDTOBuilder
   Date? get birthday => _$this._birthday;
   set birthday(Date? birthday) => _$this._birthday = birthday;
 
+  String? _avatarUrl;
+  String? get avatarUrl => _$this._avatarUrl;
+  set avatarUrl(String? avatarUrl) => _$this._avatarUrl = avatarUrl;
+
   String? _phoneNumber;
   String? get phoneNumber => _$this._phoneNumber;
   set phoneNumber(String? phoneNumber) => _$this._phoneNumber = phoneNumber;
@@ -138,20 +156,22 @@ class UserCreateRequestDTOBuilder
   String? get password => _$this._password;
   set password(String? password) => _$this._password = password;
 
-  UserCreateRequestDTOBuilder() {
-    UserCreateRequestDTO._defaults(this);
+  UserExtendedDTOBuilder() {
+    UserExtendedDTO._defaults(this);
   }
 
-  UserCreateRequestDTOBuilder get _$this {
+  UserExtendedDTOBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
+      _id = $v.id;
       _login = $v.login;
-      _role = $v.role;
+      _roleName = $v.roleName;
       _lastName = $v.lastName;
       _firstName = $v.firstName;
       _patronymic = $v.patronymic;
       _appointment = $v.appointment;
       _birthday = $v.birthday;
+      _avatarUrl = $v.avatarUrl;
       _phoneNumber = $v.phoneNumber;
       _password = $v.password;
       _$v = null;
@@ -160,29 +180,31 @@ class UserCreateRequestDTOBuilder
   }
 
   @override
-  void replace(UserCreateRequestDTO other) {
+  void replace(UserExtendedDTO other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$UserCreateRequestDTO;
+    _$v = other as _$UserExtendedDTO;
   }
 
   @override
-  void update(void Function(UserCreateRequestDTOBuilder)? updates) {
+  void update(void Function(UserExtendedDTOBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  UserCreateRequestDTO build() => _build();
+  UserExtendedDTO build() => _build();
 
-  _$UserCreateRequestDTO _build() {
+  _$UserExtendedDTO _build() {
     final _$result = _$v ??
-        new _$UserCreateRequestDTO._(
+        new _$UserExtendedDTO._(
+          id: id,
           login: login,
-          role: role,
+          roleName: roleName,
           lastName: lastName,
           firstName: firstName,
           patronymic: patronymic,
           appointment: appointment,
           birthday: birthday,
+          avatarUrl: avatarUrl,
           phoneNumber: phoneNumber,
           password: password,
         );

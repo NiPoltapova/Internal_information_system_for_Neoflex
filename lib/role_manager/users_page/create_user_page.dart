@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:news_feed_neoflex/role_manager/users_page/date_format.dart';
 import 'package:news_feed_neoflex/role_manager/users_page/phone_format.dart';
+import 'package:openapi/openapi.dart';
 
 class CreateUserPage extends StatefulWidget {
-  final Function(Map<String, String>) onSave;
+  final Function(Map<String, String?>) onSave;
 
   const CreateUserPage({Key? key, required this.onSave}) : super(key: key);
 
@@ -75,27 +76,45 @@ class _CreateUserPageState extends State<CreateUserPage> {
 
   void _saveUser() {
     if (_formKey.currentState!.validate()) {
-      final formattedPhone = _phoneController.text;
-      final newUser = {
-        'name': 'user_${DateTime.now().millisecondsSinceEpoch}',
-        'fio':
-            '${_lastNameController.text} ${_firstNameController.text} ${_middleNameController.text}',
-        'phone': formattedPhone,
-        'position': _positionController.text,
-        'role': _selectedRole,
-        'login': _loginController.text,
-        'password': _passwordController.text,
-        'birthDate': _birthDateController.text,
-      };
+      try {
+        // Преобразуем дату из формата дд.мм.гггг в гггг-мм-дд
+        final dateParts = _birthDateController.text.split('.');
+        if (dateParts.length != 3) {
+          throw FormatException('Неверный формат даты');
+        }
+        final day = int.parse(dateParts[0]);
+        final month = int.parse(dateParts[1]);
+        final year = int.parse(dateParts[2]);
+        final formattedDate =
+            '$year-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
 
-      widget.onSave(newUser);
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Пользователь успешно создан'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+        final newUser = {
+          'lastName': _lastNameController.text.trim(),
+          'firstName': _firstNameController.text.trim(),
+          'patronymic': _middleNameController.text.trim(),
+          'phone': _phoneController.text.replaceAll(RegExp(r'[^0-9+]'), ''),
+          'position': _positionController.text,
+          'role': _selectedRole,
+          'login': _loginController.text,
+          'password': _passwordController.text,
+          'birthDate': formattedDate, // Теперь в правильном формате
+        };
+
+        widget.onSave(newUser);
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Пользователь успешно создан'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка формата даты: ${e.toString()}'),
+          ),
+        );
+      }
     }
   }
 
@@ -327,7 +346,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  items: ['Сотрудник', 'Менеджер']
+                  items: ['Сотрудник', 'Администратор']
                       .map((role) => DropdownMenuItem(
                             value: role,
                             child: Text(role),

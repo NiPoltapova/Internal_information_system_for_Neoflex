@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'page_user_dto.dart';
+part of 'page_chat_summary_dto.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$PageUserDTO extends PageUserDTO {
+class _$PageChatSummaryDTO extends PageChatSummaryDTO {
   @override
   final int? totalElements;
   @override
@@ -18,7 +18,7 @@ class _$PageUserDTO extends PageUserDTO {
   @override
   final int? size;
   @override
-  final BuiltList<UserDTO>? content;
+  final BuiltList<ChatSummaryDTO>? content;
   @override
   final int? number;
   @override
@@ -30,10 +30,11 @@ class _$PageUserDTO extends PageUserDTO {
   @override
   final bool? empty;
 
-  factory _$PageUserDTO([void Function(PageUserDTOBuilder)? updates]) =>
-      (new PageUserDTOBuilder()..update(updates))._build();
+  factory _$PageChatSummaryDTO(
+          [void Function(PageChatSummaryDTOBuilder)? updates]) =>
+      (new PageChatSummaryDTOBuilder()..update(updates))._build();
 
-  _$PageUserDTO._(
+  _$PageChatSummaryDTO._(
       {this.totalElements,
       this.totalPages,
       this.first,
@@ -48,16 +49,18 @@ class _$PageUserDTO extends PageUserDTO {
       : super._();
 
   @override
-  PageUserDTO rebuild(void Function(PageUserDTOBuilder) updates) =>
+  PageChatSummaryDTO rebuild(
+          void Function(PageChatSummaryDTOBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  PageUserDTOBuilder toBuilder() => new PageUserDTOBuilder()..replace(this);
+  PageChatSummaryDTOBuilder toBuilder() =>
+      new PageChatSummaryDTOBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is PageUserDTO &&
+    return other is PageChatSummaryDTO &&
         totalElements == other.totalElements &&
         totalPages == other.totalPages &&
         first == other.first &&
@@ -91,7 +94,7 @@ class _$PageUserDTO extends PageUserDTO {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'PageUserDTO')
+    return (newBuiltValueToStringHelper(r'PageChatSummaryDTO')
           ..add('totalElements', totalElements)
           ..add('totalPages', totalPages)
           ..add('first', first)
@@ -107,8 +110,9 @@ class _$PageUserDTO extends PageUserDTO {
   }
 }
 
-class PageUserDTOBuilder implements Builder<PageUserDTO, PageUserDTOBuilder> {
-  _$PageUserDTO? _$v;
+class PageChatSummaryDTOBuilder
+    implements Builder<PageChatSummaryDTO, PageChatSummaryDTOBuilder> {
+  _$PageChatSummaryDTO? _$v;
 
   int? _totalElements;
   int? get totalElements => _$this._totalElements;
@@ -131,10 +135,11 @@ class PageUserDTOBuilder implements Builder<PageUserDTO, PageUserDTOBuilder> {
   int? get size => _$this._size;
   set size(int? size) => _$this._size = size;
 
-  ListBuilder<UserDTO>? _content;
-  ListBuilder<UserDTO> get content =>
-      _$this._content ??= new ListBuilder<UserDTO>();
-  set content(ListBuilder<UserDTO>? content) => _$this._content = content;
+  ListBuilder<ChatSummaryDTO>? _content;
+  ListBuilder<ChatSummaryDTO> get content =>
+      _$this._content ??= new ListBuilder<ChatSummaryDTO>();
+  set content(ListBuilder<ChatSummaryDTO>? content) =>
+      _$this._content = content;
 
   int? _number;
   int? get number => _$this._number;
@@ -158,11 +163,11 @@ class PageUserDTOBuilder implements Builder<PageUserDTO, PageUserDTOBuilder> {
   bool? get empty => _$this._empty;
   set empty(bool? empty) => _$this._empty = empty;
 
-  PageUserDTOBuilder() {
-    PageUserDTO._defaults(this);
+  PageChatSummaryDTOBuilder() {
+    PageChatSummaryDTO._defaults(this);
   }
 
-  PageUserDTOBuilder get _$this {
+  PageChatSummaryDTOBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _totalElements = $v.totalElements;
@@ -182,24 +187,24 @@ class PageUserDTOBuilder implements Builder<PageUserDTO, PageUserDTOBuilder> {
   }
 
   @override
-  void replace(PageUserDTO other) {
+  void replace(PageChatSummaryDTO other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$PageUserDTO;
+    _$v = other as _$PageChatSummaryDTO;
   }
 
   @override
-  void update(void Function(PageUserDTOBuilder)? updates) {
+  void update(void Function(PageChatSummaryDTOBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  PageUserDTO build() => _build();
+  PageChatSummaryDTO build() => _build();
 
-  _$PageUserDTO _build() {
-    _$PageUserDTO _$result;
+  _$PageChatSummaryDTO _build() {
+    _$PageChatSummaryDTO _$result;
     try {
       _$result = _$v ??
-          new _$PageUserDTO._(
+          new _$PageChatSummaryDTO._(
             totalElements: totalElements,
             totalPages: totalPages,
             first: first,
@@ -225,7 +230,7 @@ class PageUserDTOBuilder implements Builder<PageUserDTO, PageUserDTOBuilder> {
         _pageable?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'PageUserDTO', _$failedField, e.toString());
+            r'PageChatSummaryDTO', _$failedField, e.toString());
       }
       rethrow;
     }

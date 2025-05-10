@@ -24,12 +24,14 @@ export 'package:openapi/src/api/workspace_controller_api.dart';
 
 export 'package:openapi/src/model/booking_dto.dart';
 export 'package:openapi/src/model/chat_dto.dart';
+export 'package:openapi/src/model/chat_summary_dto.dart';
 export 'package:openapi/src/model/comment_dto.dart';
 export 'package:openapi/src/model/file_dto.dart';
 export 'package:openapi/src/model/like_dto.dart';
 export 'package:openapi/src/model/media_dto.dart';
 export 'package:openapi/src/model/message_dto.dart';
 export 'package:openapi/src/model/page_booking_dto.dart';
+export 'package:openapi/src/model/page_chat_summary_dto.dart';
 export 'package:openapi/src/model/page_like_dto.dart';
 export 'package:openapi/src/model/page_user_dto.dart';
 export 'package:openapi/src/model/pageable.dart';
@@ -38,7 +40,7 @@ export 'package:openapi/src/model/post_dto.dart';
 export 'package:openapi/src/model/repost_dto.dart';
 export 'package:openapi/src/model/sort_object.dart';
 export 'package:openapi/src/model/upload_avatar_request.dart';
-export 'package:openapi/src/model/user_create_request_dto.dart';
 export 'package:openapi/src/model/user_dto.dart';
+export 'package:openapi/src/model/user_extended_dto.dart';
 export 'package:openapi/src/model/workspace_dto.dart';
 

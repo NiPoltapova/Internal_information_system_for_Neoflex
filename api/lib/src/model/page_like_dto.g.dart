@@ -8,9 +8,9 @@ part of 'page_like_dto.dart';
 
 class _$PageLikeDTO extends PageLikeDTO {
   @override
-  final int? totalPages;
-  @override
   final int? totalElements;
+  @override
+  final int? totalPages;
   @override
   final bool? first;
   @override
@@ -34,8 +34,8 @@ class _$PageLikeDTO extends PageLikeDTO {
       (new PageLikeDTOBuilder()..update(updates))._build();
 
   _$PageLikeDTO._(
-      {this.totalPages,
-      this.totalElements,
+      {this.totalElements,
+      this.totalPages,
       this.first,
       this.last,
       this.size,
@@ -58,8 +58,8 @@ class _$PageLikeDTO extends PageLikeDTO {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is PageLikeDTO &&
-        totalPages == other.totalPages &&
         totalElements == other.totalElements &&
+        totalPages == other.totalPages &&
         first == other.first &&
         last == other.last &&
         size == other.size &&
@@ -74,8 +74,8 @@ class _$PageLikeDTO extends PageLikeDTO {
   @override
   int get hashCode {
     var _$hash = 0;
-    _$hash = $jc(_$hash, totalPages.hashCode);
     _$hash = $jc(_$hash, totalElements.hashCode);
+    _$hash = $jc(_$hash, totalPages.hashCode);
     _$hash = $jc(_$hash, first.hashCode);
     _$hash = $jc(_$hash, last.hashCode);
     _$hash = $jc(_$hash, size.hashCode);
@@ -92,8 +92,8 @@ class _$PageLikeDTO extends PageLikeDTO {
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'PageLikeDTO')
-          ..add('totalPages', totalPages)
           ..add('totalElements', totalElements)
+          ..add('totalPages', totalPages)
           ..add('first', first)
           ..add('last', last)
           ..add('size', size)
@@ -110,14 +110,14 @@ class _$PageLikeDTO extends PageLikeDTO {
 class PageLikeDTOBuilder implements Builder<PageLikeDTO, PageLikeDTOBuilder> {
   _$PageLikeDTO? _$v;
 
-  int? _totalPages;
-  int? get totalPages => _$this._totalPages;
-  set totalPages(int? totalPages) => _$this._totalPages = totalPages;
-
   int? _totalElements;
   int? get totalElements => _$this._totalElements;
   set totalElements(int? totalElements) =>
       _$this._totalElements = totalElements;
+
+  int? _totalPages;
+  int? get totalPages => _$this._totalPages;
+  set totalPages(int? totalPages) => _$this._totalPages = totalPages;
 
   bool? _first;
   bool? get first => _$this._first;
@@ -165,8 +165,8 @@ class PageLikeDTOBuilder implements Builder<PageLikeDTO, PageLikeDTOBuilder> {
   PageLikeDTOBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _totalPages = $v.totalPages;
       _totalElements = $v.totalElements;
+      _totalPages = $v.totalPages;
       _first = $v.first;
       _last = $v.last;
       _size = $v.size;
@@ -200,8 +200,8 @@ class PageLikeDTOBuilder implements Builder<PageLikeDTO, PageLikeDTOBuilder> {
     try {
       _$result = _$v ??
           new _$PageLikeDTO._(
-            totalPages: totalPages,
             totalElements: totalElements,
+            totalPages: totalPages,
             first: first,
             last: last,
             size: size,

@@ -27,8 +27,8 @@ void main() {
       // TODO
     });
 
-    // String textToComm
-    test('to test the property `textToComm`', () async {
+    // String text
+    test('to test the property `text`', () async {
       // TODO
     });
 
