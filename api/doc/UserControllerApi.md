@@ -11,7 +11,10 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**adminCreateUser**](UserControllerApi.md#admincreateuser) | **POST** /api/users | 
 [**adminDeleteUser**](UserControllerApi.md#admindeleteuser) | **DELETE** /api/users/{id} | 
+[**adminGetAllUsers**](UserControllerApi.md#admingetallusers) | **GET** /api/users/full | 
+[**adminGetUser**](UserControllerApi.md#admingetuser) | **GET** /api/users/{id}/full | 
 [**adminUpdateUser**](UserControllerApi.md#adminupdateuser) | **PUT** /api/users/{id} | 
+[**adminUploadAvatar**](UserControllerApi.md#adminuploadavatar) | **POST** /api/users/{id}/avatar | 
 [**getAllUsers**](UserControllerApi.md#getallusers) | **GET** /api/users | 
 [**getCurrentUser**](UserControllerApi.md#getcurrentuser) | **GET** /api/users/me | 
 [**getUserById**](UserControllerApi.md#getuserbyid) | **GET** /api/users/{id} | 
@@ -101,8 +104,45 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **adminUpdateUser**
-> UserDTO adminUpdateUser(id, userExtendedDTO)
+# **adminGetAllUsers**
+> BuiltList<UserExtendedDTO> adminGetAllUsers()
+
+
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getUserControllerApi();
+
+try {
+    final response = api.adminGetAllUsers();
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling UserControllerApi->adminGetAllUsers: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**BuiltList&lt;UserExtendedDTO&gt;**](UserExtendedDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **adminGetUser**
+> UserExtendedDTO adminGetUser(id)
 
 
 
@@ -112,10 +152,51 @@ import 'package:openapi/api.dart';
 
 final api = Openapi().getUserControllerApi();
 final int id = 789; // int | 
-final UserExtendedDTO userExtendedDTO = ; // UserExtendedDTO | 
 
 try {
-    final response = api.adminUpdateUser(id, userExtendedDTO);
+    final response = api.adminGetUser(id);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling UserControllerApi->adminGetUser: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **int**|  | 
+
+### Return type
+
+[**UserExtendedDTO**](UserExtendedDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **adminUpdateUser**
+> UserDTO adminUpdateUser(id, userDTO)
+
+
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getUserControllerApi();
+final int id = 789; // int | 
+final UserDTO userDTO = ; // UserDTO | 
+
+try {
+    final response = api.adminUpdateUser(id, userDTO);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling UserControllerApi->adminUpdateUser: $e\n');
@@ -127,7 +208,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **int**|  | 
- **userExtendedDTO** | [**UserExtendedDTO**](UserExtendedDTO.md)|  | 
+ **userDTO** | [**UserDTO**](UserDTO.md)|  | 
 
 ### Return type
 
@@ -140,6 +221,49 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **adminUploadAvatar**
+> UserDTO adminUploadAvatar(id, file)
+
+
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getUserControllerApi();
+final int id = 789; // int | 
+final MultipartFile file = BINARY_DATA_HERE; // MultipartFile | 
+
+try {
+    final response = api.adminUploadAvatar(id, file);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling UserControllerApi->adminUploadAvatar: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **int**|  | 
+ **file** | **MultipartFile**|  | 
+
+### Return type
+
+[**UserDTO**](UserDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -346,7 +470,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **uploadAvatar**
-> String uploadAvatar(uploadAvatarRequest)
+> UserDTO uploadAvatar(file)
 
 
 
@@ -355,10 +479,10 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api = Openapi().getUserControllerApi();
-final UploadAvatarRequest uploadAvatarRequest = ; // UploadAvatarRequest | 
+final MultipartFile file = BINARY_DATA_HERE; // MultipartFile | 
 
 try {
-    final response = api.uploadAvatar(uploadAvatarRequest);
+    final response = api.uploadAvatar(file);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling UserControllerApi->uploadAvatar: $e\n');
@@ -369,11 +493,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **uploadAvatarRequest** | [**UploadAvatarRequest**](UploadAvatarRequest.md)|  | [optional] 
+ **file** | **MultipartFile**|  | 
 
 ### Return type
 
-**String**
+[**UserDTO**](UserDTO.md)
 
 ### Authorization
 
@@ -381,7 +505,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: multipart/form-data
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

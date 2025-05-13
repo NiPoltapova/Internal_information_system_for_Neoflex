@@ -7,7 +7,6 @@ import 'dart:async';
 import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-import 'dart:typed_data';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:openapi/src/api_util.dart';
@@ -40,7 +39,7 @@ class PostControllerApi {
   Future<Response<PostDTO>> createPost({ 
     required String title,
     required String text,
-    required BuiltList<Uint8List> files,
+    required BuiltList<MultipartFile> files,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -58,17 +57,38 @@ class PostControllerApi {
         'secure': <Map<String, String>>[],
         ...?extra,
       },
+      contentType: 'multipart/form-data',
       validateStatus: validateStatus,
     );
 
     final _queryParameters = <String, dynamic>{
       r'title': encodeQueryParameter(_serializers, title, const FullType(String)),
       r'text': encodeQueryParameter(_serializers, text, const FullType(String)),
-      r'files': encodeCollectionQueryParameter<Uint8List>(_serializers, files, const FullType(BuiltList, [FullType(Uint8List)]), format: ListFormat.multi,),
     };
+
+    dynamic _bodyData;
+
+    try {
+      _bodyData = FormData.fromMap(<String, dynamic>{
+        r'files': files.toList(),
+      });
+
+    } catch(error, stackTrace) {
+      throw DioException(
+         requestOptions: _options.compose(
+          _dio.options,
+          _path,
+          queryParameters: _queryParameters,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
 
     final _response = await _dio.request<Object>(
       _path,
+      data: _bodyData,
       options: _options,
       queryParameters: _queryParameters,
       cancelToken: cancelToken,
@@ -320,8 +340,8 @@ class PostControllerApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<PostDTO>> updatePost({ 
     required int id,
-    required PostDTO postDTO,
-    required BuiltList<Uint8List> files,
+    PostDTO? postDTO,
+    BuiltList<MultipartFile>? files,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -339,18 +359,34 @@ class PostControllerApi {
         'secure': <Map<String, String>>[],
         ...?extra,
       },
+      contentType: 'multipart/form-data',
       validateStatus: validateStatus,
     );
 
-    final _queryParameters = <String, dynamic>{
-      r'postDTO': encodeQueryParameter(_serializers, postDTO, const FullType(PostDTO)),
-      r'files': encodeCollectionQueryParameter<Uint8List>(_serializers, files, const FullType(BuiltList, [FullType(Uint8List)]), format: ListFormat.multi,),
-    };
+    dynamic _bodyData;
+
+    try {
+      _bodyData = FormData.fromMap(<String, dynamic>{
+        if (postDTO != null) r'postDTO': encodeFormParameter(_serializers, postDTO, const FullType(PostDTO)),
+        if (files != null) r'files': files.toList(),
+      });
+
+    } catch(error, stackTrace) {
+      throw DioException(
+         requestOptions: _options.compose(
+          _dio.options,
+          _path,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
 
     final _response = await _dio.request<Object>(
       _path,
+      data: _bodyData,
       options: _options,
-      queryParameters: _queryParameters,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,

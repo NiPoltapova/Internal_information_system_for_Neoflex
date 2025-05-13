@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 
 # **createMessage**
-> MessageDTO createMessage(text, files, chatId)
+> MessageDTO createMessage(text, chatId, files)
 
 
 
@@ -27,11 +27,11 @@ import 'package:openapi/api.dart';
 
 final api = Openapi().getMessageControllerApi();
 final String text = text_example; // String | 
-final BuiltList<Uint8List> files = ; // BuiltList<Uint8List> | 
 final int chatId = 789; // int | 
+final BuiltList<MultipartFile> files = /path/to/file.txt; // BuiltList<MultipartFile> | 
 
 try {
-    final response = api.createMessage(text, files, chatId);
+    final response = api.createMessage(text, chatId, files);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling MessageControllerApi->createMessage: $e\n');
@@ -43,8 +43,8 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **text** | **String**|  | 
- **files** | [**BuiltList&lt;Uint8List&gt;**](Uint8List.md)|  | 
  **chatId** | **int**|  | 
+ **files** | [**BuiltList&lt;MultipartFile&gt;**](MultipartFile.md)|  | [optional] 
 
 ### Return type
 
@@ -56,7 +56,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: multipart/form-data
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -191,7 +191,7 @@ import 'package:openapi/api.dart';
 final api = Openapi().getMessageControllerApi();
 final int id = 789; // int | 
 final String newText = newText_example; // String | 
-final BuiltList<Uint8List> newFiles = ; // BuiltList<Uint8List> | 
+final BuiltList<MultipartFile> newFiles = /path/to/file.txt; // BuiltList<MultipartFile> | 
 
 try {
     final response = api.updateMessage(id, newText, newFiles);
@@ -207,7 +207,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **int**|  | 
  **newText** | **String**|  | 
- **newFiles** | [**BuiltList&lt;Uint8List&gt;**](Uint8List.md)|  | 
+ **newFiles** | [**BuiltList&lt;MultipartFile&gt;**](MultipartFile.md)|  | [optional] 
 
 ### Return type
 
@@ -219,7 +219,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: multipart/form-data
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

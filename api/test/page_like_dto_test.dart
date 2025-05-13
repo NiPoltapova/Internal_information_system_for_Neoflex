@@ -7,23 +7,13 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(PageLikeDTO, () {
-    // int totalElements
-    test('to test the property `totalElements`', () async {
-      // TODO
-    });
-
     // int totalPages
     test('to test the property `totalPages`', () async {
       // TODO
     });
 
-    // bool first
-    test('to test the property `first`', () async {
-      // TODO
-    });
-
-    // bool last
-    test('to test the property `last`', () async {
+    // int totalElements
+    test('to test the property `totalElements`', () async {
       // TODO
     });
 
@@ -44,6 +34,16 @@ void main() {
 
     // SortObject sort
     test('to test the property `sort`', () async {
+      // TODO
+    });
+
+    // bool first
+    test('to test the property `first`', () async {
+      // TODO
+    });
+
+    // bool last
+    test('to test the property `last`', () async {
       // TODO
     });
 

@@ -7,7 +7,6 @@ import 'dart:async';
 import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-import 'dart:typed_data';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:openapi/src/api_util.dart';
@@ -26,8 +25,8 @@ class MessageControllerApi {
   ///
   /// Parameters:
   /// * [text] 
-  /// * [files] 
   /// * [chatId] 
+  /// * [files] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -39,8 +38,8 @@ class MessageControllerApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<MessageDTO>> createMessage({ 
     required String text,
-    required BuiltList<Uint8List> files,
     required int chatId,
+    BuiltList<MultipartFile>? files,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -58,17 +57,38 @@ class MessageControllerApi {
         'secure': <Map<String, String>>[],
         ...?extra,
       },
+      contentType: 'multipart/form-data',
       validateStatus: validateStatus,
     );
 
     final _queryParameters = <String, dynamic>{
       r'text': encodeQueryParameter(_serializers, text, const FullType(String)),
-      r'files': encodeCollectionQueryParameter<Uint8List>(_serializers, files, const FullType(BuiltList, [FullType(Uint8List)]), format: ListFormat.multi,),
       r'chatId': encodeQueryParameter(_serializers, chatId, const FullType(int)),
     };
 
+    dynamic _bodyData;
+
+    try {
+      _bodyData = FormData.fromMap(<String, dynamic>{
+        if (files != null) r'files': files.toList(),
+      });
+
+    } catch(error, stackTrace) {
+      throw DioException(
+         requestOptions: _options.compose(
+          _dio.options,
+          _path,
+          queryParameters: _queryParameters,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
     final _response = await _dio.request<Object>(
       _path,
+      data: _bodyData,
       options: _options,
       queryParameters: _queryParameters,
       cancelToken: cancelToken,
@@ -321,7 +341,7 @@ class MessageControllerApi {
   Future<Response<MessageDTO>> updateMessage({ 
     required int id,
     required String newText,
-    required BuiltList<Uint8List> newFiles,
+    BuiltList<MultipartFile>? newFiles,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -339,16 +359,37 @@ class MessageControllerApi {
         'secure': <Map<String, String>>[],
         ...?extra,
       },
+      contentType: 'multipart/form-data',
       validateStatus: validateStatus,
     );
 
     final _queryParameters = <String, dynamic>{
       r'newText': encodeQueryParameter(_serializers, newText, const FullType(String)),
-      r'newFiles': encodeCollectionQueryParameter<Uint8List>(_serializers, newFiles, const FullType(BuiltList, [FullType(Uint8List)]), format: ListFormat.multi,),
     };
+
+    dynamic _bodyData;
+
+    try {
+      _bodyData = FormData.fromMap(<String, dynamic>{
+        if (newFiles != null) r'newFiles': newFiles.toList(),
+      });
+
+    } catch(error, stackTrace) {
+      throw DioException(
+         requestOptions: _options.compose(
+          _dio.options,
+          _path,
+          queryParameters: _queryParameters,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
 
     final _response = await _dio.request<Object>(
       _path,
+      data: _bodyData,
       options: _options,
       queryParameters: _queryParameters,
       cancelToken: cancelToken,

@@ -4,14 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditPostPage extends StatefulWidget {
+  final int? postId; // Добавляем параметр postId
   final String initialText;
+  final String? initialTitle; // Добавляем параметр для заголовка
   final List<String> initialImagePaths;
-  final Function(String, List<String>) onSave;
+  final Function(String?, String, List<String>)
+      onSave; // Обновляем сигнатуру onSave
   final Function() onDelete;
 
   const EditPostPage({
     super.key,
+    this.postId,
     required this.initialText,
+    this.initialTitle,
     required this.initialImagePaths,
     required this.onSave,
     required this.onDelete,
@@ -23,6 +28,7 @@ class EditPostPage extends StatefulWidget {
 
 class _EditPostPageState extends State<EditPostPage> {
   late TextEditingController _textController;
+  late TextEditingController _titleController;
   late List<String> _currentImagePaths;
   final ImagePicker _picker = ImagePicker();
 
@@ -30,12 +36,14 @@ class _EditPostPageState extends State<EditPostPage> {
   void initState() {
     super.initState();
     _textController = TextEditingController(text: widget.initialText);
+    _titleController = TextEditingController(text: widget.initialTitle ?? '');
     _currentImagePaths = List.from(widget.initialImagePaths);
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    _titleController.dispose();
     super.dispose();
   }
 
@@ -131,6 +139,18 @@ class _EditPostPageState extends State<EditPostPage> {
             children: [
               const SizedBox(height: 20),
               TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  hintText: 'Заголовок поста...',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(16),
+                ),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextField(
                 controller: _textController,
                 maxLines: null,
                 decoration: const InputDecoration(
@@ -209,7 +229,13 @@ class _EditPostPageState extends State<EditPostPage> {
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   onPressed: () {
-                    widget.onSave(_textController.text, _currentImagePaths);
+                    widget.onSave(
+                      _titleController.text.isNotEmpty
+                          ? _titleController.text
+                          : null,
+                      _textController.text,
+                      _currentImagePaths,
+                    );
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(

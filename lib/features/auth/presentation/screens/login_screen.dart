@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_feed_neoflex/app_routes.dart';
 import '../bloc/auth_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -8,36 +9,50 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<AuthBloc, AuthState>(
+      body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
-          } 
-          // Добавляем переход при успешной авторизации
-          else if (state is AuthAuthenticated) {
-            Navigator.pushNamed(context, '/');
+          } else {
+            // Перенаправляем на NewsFeed после успешной авторизации
+            Navigator.of(context).pushReplacementNamed(AppRoutes.newsFeed);
           }
         },
-        builder: (context, state) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (state is AuthLoading)
-                  const CircularProgressIndicator()
-                else
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<AuthBloc>().add(LoginRequested());
-                    },
-                    child: const Text('Sign in with OAuth'),
-                  ),
-              ],
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (state is AuthLoading)
+                      const CircularProgressIndicator()
+                    else
+                      ElevatedButton(
+                        onPressed: () {
+                          context.read<AuthBloc>().add(LoginRequested());
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 32, vertical: 16),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                        ),
+                        child: const Text('Войти',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ),
+                  ],
+                );
+              },
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

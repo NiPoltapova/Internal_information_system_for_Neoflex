@@ -93,6 +93,8 @@ Class | Method | HTTP request | Description
 [*MessageControllerApi*](doc/MessageControllerApi.md) | [**getAllMessages**](doc/MessageControllerApi.md#getallmessages) | **GET** /api/messages | 
 [*MessageControllerApi*](doc/MessageControllerApi.md) | [**getMessageById**](doc/MessageControllerApi.md#getmessagebyid) | **GET** /api/messages/{id} | 
 [*MessageControllerApi*](doc/MessageControllerApi.md) | [**updateMessage**](doc/MessageControllerApi.md#updatemessage) | **PUT** /api/messages/{id} | 
+[*NotificationControllerApi*](doc/NotificationControllerApi.md) | [**getNotifications**](doc/NotificationControllerApi.md#getnotifications) | **GET** /api/notifications | 
+[*NotificationControllerApi*](doc/NotificationControllerApi.md) | [**markAsRead**](doc/NotificationControllerApi.md#markasread) | **PATCH** /api/notifications/{id}/read | 
 [*PostControllerApi*](doc/PostControllerApi.md) | [**createPost**](doc/PostControllerApi.md#createpost) | **POST** /api/posts | 
 [*PostControllerApi*](doc/PostControllerApi.md) | [**deletePost**](doc/PostControllerApi.md#deletepost) | **DELETE** /api/posts/{id} | 
 [*PostControllerApi*](doc/PostControllerApi.md) | [**getAllPosts**](doc/PostControllerApi.md#getallposts) | **GET** /api/posts | 
@@ -104,7 +106,10 @@ Class | Method | HTTP request | Description
 [*RepostControllerApi*](doc/RepostControllerApi.md) | [**getRepostById**](doc/RepostControllerApi.md#getrepostbyid) | **GET** /api/reposts/{id} | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**adminCreateUser**](doc/UserControllerApi.md#admincreateuser) | **POST** /api/users | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**adminDeleteUser**](doc/UserControllerApi.md#admindeleteuser) | **DELETE** /api/users/{id} | 
+[*UserControllerApi*](doc/UserControllerApi.md) | [**adminGetAllUsers**](doc/UserControllerApi.md#admingetallusers) | **GET** /api/users/full | 
+[*UserControllerApi*](doc/UserControllerApi.md) | [**adminGetUser**](doc/UserControllerApi.md#admingetuser) | **GET** /api/users/{id}/full | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**adminUpdateUser**](doc/UserControllerApi.md#adminupdateuser) | **PUT** /api/users/{id} | 
+[*UserControllerApi*](doc/UserControllerApi.md) | [**adminUploadAvatar**](doc/UserControllerApi.md#adminuploadavatar) | **POST** /api/users/{id}/avatar | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**getAllUsers**](doc/UserControllerApi.md#getallusers) | **GET** /api/users | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**getCurrentUser**](doc/UserControllerApi.md#getcurrentuser) | **GET** /api/users/me | 
 [*UserControllerApi*](doc/UserControllerApi.md) | [**getUserById**](doc/UserControllerApi.md#getuserbyid) | **GET** /api/users/{id} | 
@@ -129,6 +134,7 @@ Class | Method | HTTP request | Description
  - [LikeDTO](doc/LikeDTO.md)
  - [MediaDTO](doc/MediaDTO.md)
  - [MessageDTO](doc/MessageDTO.md)
+ - [MessageNotificationDTO](doc/MessageNotificationDTO.md)
  - [PageBookingDTO](doc/PageBookingDTO.md)
  - [PageChatSummaryDTO](doc/PageChatSummaryDTO.md)
  - [PageLikeDTO](doc/PageLikeDTO.md)
@@ -138,7 +144,6 @@ Class | Method | HTTP request | Description
  - [PostDTO](doc/PostDTO.md)
  - [RepostDTO](doc/RepostDTO.md)
  - [SortObject](doc/SortObject.md)
- - [UploadAvatarRequest](doc/UploadAvatarRequest.md)
  - [UserDTO](doc/UserDTO.md)
  - [UserExtendedDTO](doc/UserExtendedDTO.md)
  - [WorkspaceDTO](doc/WorkspaceDTO.md)

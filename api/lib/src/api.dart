@@ -16,6 +16,7 @@ import 'package:openapi/src/api/file_controller_api.dart';
 import 'package:openapi/src/api/like_controller_api.dart';
 import 'package:openapi/src/api/media_controller_api.dart';
 import 'package:openapi/src/api/message_controller_api.dart';
+import 'package:openapi/src/api/notification_controller_api.dart';
 import 'package:openapi/src/api/post_controller_api.dart';
 import 'package:openapi/src/api/repost_controller_api.dart';
 import 'package:openapi/src/api/user_controller_api.dart';
@@ -115,6 +116,12 @@ class Openapi {
   /// by doing that all interceptors will not be executed
   MessageControllerApi getMessageControllerApi() {
     return MessageControllerApi(dio, serializers);
+  }
+
+  /// Get NotificationControllerApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  NotificationControllerApi getNotificationControllerApi() {
+    return NotificationControllerApi(dio, serializers);
   }
 
   /// Get PostControllerApi instance, base route and serializer can be overridden by a given but be careful,

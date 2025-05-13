@@ -12,10 +12,6 @@ class _$PageBookingDTO extends PageBookingDTO {
   @override
   final int? totalPages;
   @override
-  final bool? first;
-  @override
-  final bool? last;
-  @override
   final int? size;
   @override
   final BuiltList<BookingDTO>? content;
@@ -23,6 +19,10 @@ class _$PageBookingDTO extends PageBookingDTO {
   final int? number;
   @override
   final SortObject? sort;
+  @override
+  final bool? first;
+  @override
+  final bool? last;
   @override
   final int? numberOfElements;
   @override
@@ -36,12 +36,12 @@ class _$PageBookingDTO extends PageBookingDTO {
   _$PageBookingDTO._(
       {this.totalElements,
       this.totalPages,
-      this.first,
-      this.last,
       this.size,
       this.content,
       this.number,
       this.sort,
+      this.first,
+      this.last,
       this.numberOfElements,
       this.pageable,
       this.empty})
@@ -61,12 +61,12 @@ class _$PageBookingDTO extends PageBookingDTO {
     return other is PageBookingDTO &&
         totalElements == other.totalElements &&
         totalPages == other.totalPages &&
-        first == other.first &&
-        last == other.last &&
         size == other.size &&
         content == other.content &&
         number == other.number &&
         sort == other.sort &&
+        first == other.first &&
+        last == other.last &&
         numberOfElements == other.numberOfElements &&
         pageable == other.pageable &&
         empty == other.empty;
@@ -77,12 +77,12 @@ class _$PageBookingDTO extends PageBookingDTO {
     var _$hash = 0;
     _$hash = $jc(_$hash, totalElements.hashCode);
     _$hash = $jc(_$hash, totalPages.hashCode);
-    _$hash = $jc(_$hash, first.hashCode);
-    _$hash = $jc(_$hash, last.hashCode);
     _$hash = $jc(_$hash, size.hashCode);
     _$hash = $jc(_$hash, content.hashCode);
     _$hash = $jc(_$hash, number.hashCode);
     _$hash = $jc(_$hash, sort.hashCode);
+    _$hash = $jc(_$hash, first.hashCode);
+    _$hash = $jc(_$hash, last.hashCode);
     _$hash = $jc(_$hash, numberOfElements.hashCode);
     _$hash = $jc(_$hash, pageable.hashCode);
     _$hash = $jc(_$hash, empty.hashCode);
@@ -95,12 +95,12 @@ class _$PageBookingDTO extends PageBookingDTO {
     return (newBuiltValueToStringHelper(r'PageBookingDTO')
           ..add('totalElements', totalElements)
           ..add('totalPages', totalPages)
-          ..add('first', first)
-          ..add('last', last)
           ..add('size', size)
           ..add('content', content)
           ..add('number', number)
           ..add('sort', sort)
+          ..add('first', first)
+          ..add('last', last)
           ..add('numberOfElements', numberOfElements)
           ..add('pageable', pageable)
           ..add('empty', empty))
@@ -121,14 +121,6 @@ class PageBookingDTOBuilder
   int? get totalPages => _$this._totalPages;
   set totalPages(int? totalPages) => _$this._totalPages = totalPages;
 
-  bool? _first;
-  bool? get first => _$this._first;
-  set first(bool? first) => _$this._first = first;
-
-  bool? _last;
-  bool? get last => _$this._last;
-  set last(bool? last) => _$this._last = last;
-
   int? _size;
   int? get size => _$this._size;
   set size(int? size) => _$this._size = size;
@@ -145,6 +137,14 @@ class PageBookingDTOBuilder
   SortObjectBuilder? _sort;
   SortObjectBuilder get sort => _$this._sort ??= new SortObjectBuilder();
   set sort(SortObjectBuilder? sort) => _$this._sort = sort;
+
+  bool? _first;
+  bool? get first => _$this._first;
+  set first(bool? first) => _$this._first = first;
+
+  bool? _last;
+  bool? get last => _$this._last;
+  set last(bool? last) => _$this._last = last;
 
   int? _numberOfElements;
   int? get numberOfElements => _$this._numberOfElements;
@@ -169,12 +169,12 @@ class PageBookingDTOBuilder
     if ($v != null) {
       _totalElements = $v.totalElements;
       _totalPages = $v.totalPages;
-      _first = $v.first;
-      _last = $v.last;
       _size = $v.size;
       _content = $v.content?.toBuilder();
       _number = $v.number;
       _sort = $v.sort?.toBuilder();
+      _first = $v.first;
+      _last = $v.last;
       _numberOfElements = $v.numberOfElements;
       _pageable = $v.pageable?.toBuilder();
       _empty = $v.empty;
@@ -204,12 +204,12 @@ class PageBookingDTOBuilder
           new _$PageBookingDTO._(
             totalElements: totalElements,
             totalPages: totalPages,
-            first: first,
-            last: last,
             size: size,
             content: _content?.build(),
             number: number,
             sort: _sort?.build(),
+            first: first,
+            last: last,
             numberOfElements: numberOfElements,
             pageable: _pageable?.build(),
             empty: empty,

@@ -1,12 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:built_collection/built_collection.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+import 'package:news_feed_neoflex/app_routes.dart';
 import 'package:news_feed_neoflex/features/auth/presentation/screens/login_screen.dart';
 import 'package:news_feed_neoflex/horizontal_image_slider.dart';
 import 'package:news_feed_neoflex/post_model.dart';
 import 'package:news_feed_neoflex/role_manager/edit_post_page.dart';
 import 'package:news_feed_neoflex/role_manager/new_post_page/new_post_page.dart';
+import 'package:news_feed_neoflex/role_manager/users_page/user_profile_page.dart';
+import 'package:openapi/openapi.dart';
 
 class NewsFeed extends StatefulWidget {
   const NewsFeed({super.key});
@@ -26,12 +32,64 @@ class NewsFeedState extends State<NewsFeed> {
   bool _sortAscending = true;
   bool _showFilters = false;
   DateTime? _selectedDate;
+  String? _currentUserRole;
+  bool _isRoleLoaded = false;
+  bool _isAdmin = false;
 
   @override
   void initState() {
     super.initState();
     filteredPosts = [];
     loadPosts();
+    _loadUserRole();
+  }
+
+  Future<void> _loadUserRole() async {
+    try {
+      setState(() {
+        _isRoleLoaded = false;
+      });
+
+      final userApi = GetIt.I<Openapi>().getUserControllerApi();
+      final response = await userApi.getCurrentUser();
+
+      if (response.data == null || response.data!.roleName == null) {
+        throw Exception('User data or role is null');
+      }
+
+      if (mounted) {
+        setState(() {
+          _currentUserRole = response.data!.roleName!.toUpperCase().trim();
+          _isAdmin = _currentUserRole == 'ROLE_ADMIN';
+          _isRoleLoaded = true;
+          print('User role loaded: $_currentUserRole, isAdmin: $_isAdmin');
+        });
+      }
+    } on DioException catch (e) {
+      print('DioError loading user role: ${e.message}');
+      if (e.response?.statusCode == 401) {
+        // Токен невалиден - нужно разлогинить
+        _handleInvalidToken();
+      }
+    } catch (e) {
+      print('Error loading user role: $e');
+    } finally {
+      if (mounted && !_isRoleLoaded) {
+        setState(() {
+          _isRoleLoaded = true; // Чтобы не заблокировать UI
+        });
+      }
+    }
+  }
+
+  void _handleInvalidToken() {
+    // Очищаем токены и перенаправляем на логин
+    // Реализация зависит от вашей системы хранения токенов
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.loginPage,
+      (route) => false,
+    );
   }
 
   Future<void> loadPosts() async {
@@ -39,39 +97,52 @@ class NewsFeedState extends State<NewsFeed> {
       isLoading = true;
     });
 
+    print('Starting to load posts...');
+
     try {
-      final String jsonString =
-          await rootBundle.loadString('assets/images.json');
-      final Map<String, dynamic> json = jsonDecode(jsonString);
-      final List<dynamic> postsData = json['posts'];
+      final postApi = GetIt.I<Openapi>().getPostControllerApi();
+      final response = await postApi.getAllPosts().catchError((error) async {
+        if (error is DioException && error.response?.statusCode == 401) {
+          // Попытка обновить токен
+          await _refreshToken();
+          // Повторный запрос после обновления токена
+          return await postApi.getAllPosts();
+        }
+        throw error;
+      });
+
+      print('Response status: ${response.statusCode}');
+      print('Response data length: ${response.data?.length ?? 0}');
+
+      if (response.data == null) {
+        print('No posts data received');
+        throw Exception('No posts data received');
+      }
 
       List<Post> newPosts = [];
-      for (var postData in postsData) {
-        List<String> imageUrls = List<String>.from(
-            (postData['images'] as List<dynamic>)
-                .map((imageName) => 'assets/images/$imageName'));
-        String textFileName = postData['text'];
-        String text = await loadText(textFileName);
-        DateTime date = DateTime.parse(postData['date']);
-        int views = postData['views'] ?? 0;
-
-        newPosts.add(
-          Post(
-            imageUrls: imageUrls,
-            textFileName: textFileName,
-            text: text,
-            comments: [],
-            date: date,
-            views: views,
-          ),
-        );
+      for (var postDto in response.data!) {
+        print('Processing post with ID: ${postDto.id}'); // Добавлено
+        print('Post text: ${postDto.text}'); // Добавлено
+        print('Media URLs count: ${postDto.mediaUrls?.length ?? 0}');
+        newPosts.add(Post.fromDto(postDto));
         showCommentInput.add(false);
       }
+
+      print('Successfully loaded ${newPosts.length} posts');
 
       setState(() {
         posts = newPosts;
         filteredPosts = List.from(newPosts);
-        //_applySort();
+        _applySort();
+        isLoading = false;
+      });
+    } on DioException catch (e) {
+      print('DioError loading posts: ${e.message}');
+      print('Response data: ${e.response?.data}');
+      if (e.response?.statusCode == 401) {
+        _handleInvalidToken();
+      }
+      setState(() {
         isLoading = false;
       });
     } catch (e) {
@@ -79,6 +150,17 @@ class NewsFeedState extends State<NewsFeed> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> _refreshToken() async {
+    try {
+      // Здесь должна быть логика обновления токена
+      // Например, через Auth0 или ваш сервер аутентификации
+      // После успешного обновления сохраните новый токен
+    } catch (e) {
+      print('Error refreshing token: $e');
+      _handleInvalidToken();
     }
   }
 
@@ -120,14 +202,74 @@ class NewsFeedState extends State<NewsFeed> {
     });
   }
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
     if (index == 1) {
-      Navigator.pushNamed(context, '/page1');
+      Navigator.pushNamed(context, AppRoutes.bookPage);
     } else if (index == 2) {
-      Navigator.pushNamed(context, '/page2');
+      Navigator.pushNamed(context, AppRoutes.chatPage);
     } else if (index == 3) {
-      Navigator.pushNamed(context, '/page3',
-          arguments: {'title': 'New title2'});
+      if (_isAdmin) {
+        Navigator.pushNamed(context, AppRoutes.listOfUsers);
+      } else {
+        try {
+          final userApi = GetIt.I<Openapi>().getUserControllerApi();
+          final response = await userApi.getCurrentUser();
+          if (response.data != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UserProfilePage(
+                  userData: {
+                    'id': response.data!.id?.toString() ?? '',
+                    'fio':
+                        '${response.data!.firstName ?? ''} ${response.data!.lastName ?? ''} ${response.data!.patronymic ?? ''}',
+                    'phone': response.data!.phoneNumber ?? '',
+                    'position': response.data!.appointment ?? '',
+                    'role': response.data!.roleName ?? 'ROLE_USER',
+                    'login': response.data!.login ?? '',
+                    'birthDate': response.data!.birthday?.toString() ?? '',
+                    'avatarUrl': response.data!.avatarUrl ?? '',
+                  },
+                  onSave: (updatedUser) async {
+                    try {
+                      await GetIt.I<Openapi>()
+                          .getUserControllerApi()
+                          .updateCurrentUser(userDTO: updatedUser);
+
+                      final updatedResponse = await userApi.getCurrentUser();
+                      if (updatedResponse.data != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Профиль успешно обновлен')),
+                        );
+                      }
+                    } catch (e) {
+                      debugPrint('API Error: $e');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content:
+                                Text('Ошибка сохранения: ${e.toString()}')),
+                      );
+                      rethrow;
+                    }
+                  },
+                  onDelete: (userId) {
+                    // Логика удаления
+                  },
+                  onAvatarChanged: (file) {
+                    // Логика обновления аватара
+                  },
+                  isAdmin: false,
+                ),
+              ),
+            );
+          }
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Ошибка загрузки профиля: ${e.toString()}')),
+          );
+        }
+      }
     } else {
       setState(() {
         _selectedIndex = index;
@@ -142,9 +284,9 @@ class NewsFeedState extends State<NewsFeed> {
       } else {
         filteredPosts = posts
             .where((post) =>
-                post.date.year == _selectedDate?.year &&
-                post.date.month == _selectedDate?.month &&
-                post.date.day == _selectedDate?.day)
+                post.createdWhen.year == _selectedDate?.year &&
+                post.createdWhen.month == _selectedDate?.month &&
+                post.createdWhen.day == _selectedDate?.day)
             .toList();
       }
       _applySort();
@@ -155,8 +297,8 @@ class NewsFeedState extends State<NewsFeed> {
     setState(() {
       if (_sortBy == 'date') {
         filteredPosts.sort((a, b) => _sortAscending
-            ? a.date.compareTo(b.date)
-            : b.date.compareTo(a.date));
+            ? a.createdWhen.compareTo(b.createdWhen)
+            : b.createdWhen.compareTo(a.createdWhen));
       } else if (_sortBy == 'popularity') {
         filteredPosts.sort((a, b) => _sortAscending
             ? (a.likesCount + a.views).compareTo(b.likesCount + b.views)
@@ -186,19 +328,60 @@ class NewsFeedState extends State<NewsFeed> {
         context,
         MaterialPageRoute(
           builder: (context) => EditPostPage(
+            postId: post.id,
             initialText: post.text,
+            initialTitle: post.title,
             initialImagePaths: post.imageUrls,
-            onSave: (newText, newImages) {
-              setState(() {
-                filteredPosts[index].text = newText;
-                filteredPosts[index].imageUrls = newImages;
-              });
+            onSave: (newTitle, newText, newImages) async {
+              try {
+                final postApi = GetIt.I<Openapi>().getPostControllerApi();
+                final files = newImages
+                    .map((path) => MultipartFile.fromFileSync(path))
+                    .toList();
+
+                if (post.id == null) {
+                  // Создание нового поста
+                  await postApi.createPost(
+                    title: newTitle ?? '',
+                    text: newText,
+                    files: BuiltList(files),
+                  );
+                } else {
+                  // Обновление существующего поста
+                  await postApi.updatePost(
+                    id: post.id!,
+                    postDTO: PostDTO((b) => b
+                      ..title = newTitle
+                      ..text = newText),
+                    files: BuiltList(files),
+                  );
+                }
+
+                // Обновляем список постов после изменения
+                await loadPosts();
+              } catch (e) {
+                print('Error saving post: $e');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Ошибка сохранения: ${e.toString()}')),
+                );
+              }
             },
-            onDelete: () {
-              setState(() {
-                posts.removeAt(index);
-                filteredPosts.removeAt(index);
-              });
+            onDelete: () async {
+              try {
+                if (post.id != null) {
+                  final postApi = GetIt.I<Openapi>().getPostControllerApi();
+                  await postApi.deletePost(id: post.id!);
+                  setState(() {
+                    posts.removeAt(index);
+                    filteredPosts.removeAt(index);
+                  });
+                }
+              } catch (e) {
+                print('Error deleting post: $e');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Ошибка удаления: ${e.toString()}')),
+                );
+              }
             },
           ),
         ),
@@ -445,6 +628,13 @@ class NewsFeedState extends State<NewsFeed> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isRoleLoaded) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.purple,
@@ -455,14 +645,6 @@ class NewsFeedState extends State<NewsFeed> {
         ),
         actions: [
           IconButton(
-              icon: const Icon(Icons.account_circle),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              }), //Переход на страницу авторизации
-          IconButton(
             icon: const Icon(Icons.filter_alt),
             onPressed: () {
               setState(() {
@@ -470,15 +652,16 @@ class NewsFeedState extends State<NewsFeed> {
               });
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NewPostPage()),
-              );
-            },
-          ),
+          if (_isAdmin)
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NewPostPage()),
+                );
+              },
+            ),
           // IconButton(
           //   icon: const Icon(Icons.notifications_none),
           //   onPressed: () {},
@@ -518,7 +701,7 @@ class NewsFeedState extends State<NewsFeed> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '${post.date.day}.${post.date.month}.${post.date.year}',
+                                        '${post.createdWhen.day}.${post.createdWhen.month}.${post.createdWhen.year}',
                                         style:
                                             const TextStyle(color: Colors.grey),
                                       ),
@@ -566,11 +749,12 @@ class NewsFeedState extends State<NewsFeed> {
                                       onPressed: () =>
                                           toggleCommentInput(index),
                                     ),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      onPressed: () => _navigateToEditPost(
-                                          context, post, index),
-                                    ),
+                                    if (_isAdmin)
+                                      IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        onPressed: () => _navigateToEditPost(
+                                            context, post, index),
+                                      ),
                                   ],
                                 ),
                                 if (showCommentInput.length > index &&

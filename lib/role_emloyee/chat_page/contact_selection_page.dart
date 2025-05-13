@@ -1,33 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:openapi/openapi.dart';
 
 class ContactSelectionPage extends StatelessWidget {
-  final void Function(String) onContactSelected;
+  final List<UserDTO> users;
 
   const ContactSelectionPage({
     super.key,
-    required this.onContactSelected,
+    required this.users,
   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final contacts = List.generate(20, (index) => 'Контакт ${index + 1}');
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Выберите контакт'),
+//       ),
+//       body: ListView.builder(
+//         itemCount: contacts.length,
+//         itemBuilder: (context, index) {
+//           return ListTile(
+//             leading: const CircleAvatar(
+//               backgroundImage: AssetImage("assets/images/imageMyProfile.jpg"),
+//             ),
+//             title: Text(contacts[index]),
+//             subtitle: const Text('был(а) недавно'),
+//             onTap: () {
+//               onContactSelected(contacts[index]);
+//               Navigator.pop(context);
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
   @override
   Widget build(BuildContext context) {
-    final contacts = List.generate(20, (index) => 'Контакт ${index + 1}');
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Выберите контакт'),
       ),
       body: ListView.builder(
-        itemCount: contacts.length,
+        itemCount: users.length,
         itemBuilder: (context, index) {
+          final user = users[index];
           return ListTile(
-            leading: const CircleAvatar(
-              backgroundImage: AssetImage("assets/images/imageMyProfile.jpg"),
+            leading: CircleAvatar(
+              backgroundImage:
+                  user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
+              child: user.avatarUrl == null ? const Icon(Icons.person) : null,
             ),
-            title: Text(contacts[index]),
-            subtitle: const Text('был(а) недавно'),
+            title: Text('${user.firstName} ${user.lastName}'),
+            subtitle: Text(user.appointment ?? ''),
             onTap: () {
-              onContactSelected(contacts[index]);
-              Navigator.pop(context);
+              Navigator.pop(context, user);
             },
           );
         },

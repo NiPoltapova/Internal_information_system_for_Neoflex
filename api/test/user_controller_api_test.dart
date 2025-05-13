@@ -47,7 +47,7 @@ void main() {
       // TODO
     });
 
-    //Future<String> uploadAvatar({ UploadAvatarRequest uploadAvatarRequest }) async
+    //Future<String> uploadAvatar(MultipartFile file) async
     test('test uploadAvatar', () async {
       // TODO
     });
