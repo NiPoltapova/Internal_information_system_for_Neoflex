@@ -23,7 +23,8 @@ class Post {
     this.views = 0,
   });
 
-  factory Post.fromDto(PostDTO dto) {
+  // В классе Post исправьте factory constructor
+  factory Post.fromResponseDto(PostResponseDTO dto) {
     return Post(
       id: dto.id,
       createdWhen: dto.createdWhen ?? DateTime.now(),
@@ -34,6 +35,8 @@ class Post {
               .toList() ??
           [],
       userId: dto.userId ?? 0,
+      likesCount: dto.likeCount ?? 0,
+      isLiked: dto.liked ?? false,
     );
   }
   // factory Post.fromResponseDto(PostResponseDTO dto) {

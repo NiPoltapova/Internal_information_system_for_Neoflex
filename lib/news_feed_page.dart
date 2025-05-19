@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:news_feed_neoflex/app_routes.dart';
+import 'package:news_feed_neoflex/features/auth/auth_repository_impl.dart';
 import 'package:news_feed_neoflex/features/auth/presentation/screens/login_screen.dart';
 import 'package:news_feed_neoflex/horizontal_image_slider.dart';
 import 'package:news_feed_neoflex/post_model.dart';
@@ -35,25 +36,54 @@ class NewsFeedState extends State<NewsFeed> {
   String? _currentUserRole;
   bool _isRoleLoaded = false;
   bool _isAdmin = false;
+  String? _errorMessage;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     filteredPosts = [];
-    _loadUserRole();
-    loadPosts();
+    _initializeApp();
+    // _loadUserRole();
+    // loadPosts();
+  }
+
+  Future<void> _initializeApp() async {
+    final token = await GetIt.I<AuthRepositoryImpl>().getAccessToken();
+    if (token == null) {
+      _handleInvalidToken();
+      return;
+    }
+
+    // Настраиваем Dio
+    final dio = GetIt.I<Dio>();
+    dio.options.headers['Authorization'] = 'Bearer $token';
+
+    // Затем загружаем данные
+    await Future.wait([
+      _loadUserRole(),
+      loadPosts(),
+    ]);
   }
 
   Future<void> _loadUserRole() async {
     try {
       setState(() {
-        _isRoleLoaded = false;
+        _isLoading = true;
+        _errorMessage = null;
       });
+      final token = await GetIt.I<AuthRepositoryImpl>().getAccessToken();
+      if (token == null) {
+        throw Exception('No access token');
+      }
+
+      final dio = GetIt.I<Dio>();
+      dio.options.headers['Authorization'] = 'Bearer $token';
 
       final userApi = GetIt.I<Openapi>().getUserControllerApi();
       final response = await userApi.getCurrentUser();
 
-      if (response.statusCode != 200 || response.data == null) {
+      if (response.data!.roleName == null || response.data == null) {
         throw Exception('Failed to load user role');
       }
 
@@ -66,21 +96,24 @@ class NewsFeedState extends State<NewsFeed> {
       if (e.response?.statusCode == 401) {
         _handleInvalidToken();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ошибка загрузки роли: ${e.message}')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Ошибка загрузки роли: ${e.message}')),
+        // );
+        debugPrint('Error loading user role: ${e.message}');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка: $e')),
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isRoleLoaded = true;
-        });
-      }
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Ошибка: $e')),
+      // );
+      debugPrint('Unexpected error: $e');
     }
+    // finally {
+    //   if (mounted) {
+    //     setState(() {
+    //       _isRoleLoaded = true;
+    //     });
+    //   }
+    // }
   }
 
   // Future<void> _loadUserRole() async {
@@ -133,61 +166,63 @@ class NewsFeedState extends State<NewsFeed> {
     if (!mounted) return;
 
     setState(() {
-      isLoading = true;
+      _isLoading = true;
+      _errorMessage = null;
     });
 
     try {
-      final postApi = GetIt.I<Openapi>().getPostControllerApi();
-      final response = await postApi.getAllPosts();
+      // 1. Получаем токен
+      final token = await GetIt.I<AuthRepositoryImpl>().getAccessToken();
 
+      // 2. Настраиваем Dio
+      final dio = GetIt.I<Dio>();
+      dio.options.headers['Authorization'] = 'Bearer $token';
+
+      // 3. Делаем запрос
+      final postApi = GetIt.I<Openapi>().getPostControllerApi();
+      final response = await postApi.getAllPosts(
+        sortBy: _sortBy,
+        page: 0,
+        size: 100,
+      );
+
+      // 4. Проверяем ответ
       if (response.statusCode != 200 || response.data == null) {
-        throw Exception('Failed to load posts');
+        throw Exception('Server returned ${response.statusCode}');
       }
 
-      // Получаем контент из PagePostResponseDTO
+      // 5. Обрабатываем данные
       final pageResponse = response.data!;
       final postDTOs = pageResponse.content ?? BuiltList<PostResponseDTO>();
 
-      // Конвертируем DTO в наши модели
-      final newPosts = postDTOs
-          .map((dto) => Post(
-                id: dto.id,
-                createdWhen: dto.createdWhen ?? DateTime.now(),
-                text: dto.text ?? '',
-                imageUrls: dto.media
-                        ?.map((m) => m.downloadUrl ?? '')
-                        .where((url) => url.isNotEmpty)
-                        .toList() ??
-                    [],
-                userId: dto.userId ?? 0,
-                likesCount: dto.likeCount ?? 0,
-                isLiked: dto.liked ?? false,
-              ))
-          .toList();
+      final newPosts =
+          postDTOs.map((dto) => Post.fromResponseDto(dto)).toList();
 
       setState(() {
         posts = newPosts;
         filteredPosts = List.from(newPosts);
         showCommentInput = List.filled(newPosts.length, false);
-        _applySort();
       });
     } on DioException catch (e) {
+      debugPrint('DioError: ${e.message}');
+      debugPrint('Response: ${e.response}');
+
+      setState(() {
+        _errorMessage = 'Ошибка загрузки: ${e.message}';
+      });
+
       if (e.response?.statusCode == 401) {
         _handleInvalidToken();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ошибка загрузки постов: ${e.message}')),
-        );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка: $e')),
-      );
+    } catch (e, stack) {
+      debugPrint('Error: $e');
+      debugPrint('Stack: $stack');
+      setState(() {
+        _errorMessage = 'Неизвестная ошибка';
+      });
     } finally {
       if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
+        setState(() => _isLoading = false);
       }
     }
   }
@@ -775,6 +810,14 @@ class NewsFeedState extends State<NewsFeed> {
             color: Colors.grey,
           ),
           if (_showFilters) _buildFilterControls(),
+          if (_errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                _errorMessage!,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12.0),

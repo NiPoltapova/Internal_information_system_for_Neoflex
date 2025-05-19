@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_remote_datasource.dart';
 import 'service/user_profile_service.dart';
-
 
 // Репозиторий с поддержкой разных платформ
 class AuthRepositoryImpl {
@@ -14,63 +14,76 @@ class AuthRepositoryImpl {
   AuthRepositoryImpl({
     required SecureStorage storage,
     bool isMobile = false,
-  }) : _storage = storage,
-       _userService = UserService(storage) {
-    _remoteDataSource = isMobile 
-      ? MobileAuthRemoteDataSource() 
-      : UniversalAuthRemoteDataSource();
+  })  : _storage = storage,
+        _userService = UserService(storage) {
+    _remoteDataSource = isMobile
+        ? MobileAuthRemoteDataSource()
+        : UniversalAuthRemoteDataSource();
   }
 
-Future<void> persistTokens(oauth2.Client client) async {
-  print('[DEBUG] Persisting tokens...');
-  
-  await _storage.write(
-    key: 'access_token',
-    value: client.credentials.accessToken,
-  );
-  print('[DEBUG] Access Token: ${client.credentials.accessToken}');
+  Future<void> persistTokens(oauth2.Client client) async {
+    debugPrint('[DEBUG] Persisting tokens...');
 
-  await _storage.write(
-    key: 'refresh_token',
-    value: client.credentials.refreshToken,
-  );
-  print('[DEBUG] Refresh Token: ${client.credentials.refreshToken}');
+    await _storage.write(
+      key: 'access_token',
+      value: client.credentials.accessToken,
+    );
+    debugPrint('[DEBUG] Access Token: ${client.credentials.accessToken}');
 
-  await _storage.write(
-    key: 'id_token',
-    value: client.credentials.idToken,
-  );
-  print('[DEBUG] ID Token: ${client.credentials.idToken}');
+    await _storage.write(
+      key: 'refresh_token',
+      value: client.credentials.refreshToken,
+    );
+    debugPrint('[DEBUG] Refresh Token: ${client.credentials.refreshToken}');
 
-  print('[DEBUG] Tokens persisted successfully');
-}
+    await _storage.write(
+      key: 'id_token',
+      value: client.credentials.idToken,
+    );
+    debugPrint('[DEBUG] ID Token: ${client.credentials.idToken}');
+
+    debugPrint('[DEBUG] Tokens persisted successfully');
+  }
 
   Future<oauth2.Client> refreshToken() async {
     final refreshToken = await _storage.read(key: 'refresh_token');
+    if (refreshToken == null) {
+      throw Exception('No refresh token available');
+    }
     final client = await _remoteDataSource.refreshToken(refreshToken!);
     await persistTokens(client);
     return client;
   }
+
   Future<oauth2.Client> login() async {
     final client = await _remoteDataSource.login();
     await persistTokens(client);
     return client;
   }
+
   Future<void> logout() async {
     await _storage.delete(key: 'access_token');
     await _storage.delete(key: 'refresh_token');
     await _storage.delete(key: 'id_token');
   }
 
-    // Добавьте новые методы
+  // Добавьте новые методы
   Future<UserProfile?> getCurrentUser() => _userService.getUserProfile();
   Future<String?> getCurrentUserName() => _userService.getUserName();
 
   // Future<String?> getAccessToken() => _storage.read(key: 'access_token');
-  Future<String> getAccessToken() async { // Возвращает String, а не String?
-  final token = await _storage.read(key: 'access_token');
-  return token ?? '';
-}
+  Future<String> getAccessToken() async {
+    // Возвращает String, а не String?
+    final token = await _storage.read(key: 'access_token');
+    if (token == null) {
+      debugPrint('Access token is null');
+      throw Exception(
+          'No access token available'); // Бросаем исключение вместо возврата null
+    }
+    return token;
+    // return token ?? '';
+  }
+
   Future<String?> getRefreshToken() => _storage.read(key: 'refresh_token');
   Future<String?> getIdToken() => _storage.read(key: 'id_token');
 }
