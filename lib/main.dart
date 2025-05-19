@@ -23,9 +23,8 @@ void main() {
     MultiBlocProvider(
       providers: <BlocProvider>[
         BlocProvider<AuthBloc>(
-          create: (BuildContext context) =>
-              AuthBloc(getIt<AuthRepositoryImpl>()),
-        )
+            create: (BuildContext context) =>
+                AuthBloc(getIt<AuthRepositoryImpl>()))
       ],
       child: const MyApp(),
     ),

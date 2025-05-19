@@ -8,23 +8,28 @@ import 'package:openapi/src/model/media_dto.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'post_dto.g.dart';
+part 'post_response_dto.g.dart';
 
-/// PostDTO
+/// PostResponseDTO
 ///
 /// Properties:
-/// * [id] 
-/// * [createdWhen] 
-/// * [text] 
-/// * [media] 
-/// * [userId] 
+/// * [id]
+/// * [createdWhen]
+/// * [text]
+/// * [media]
+/// * [userId]
+/// * [likeCount]
+/// * [commentCount]
+/// * [repostCount]
+/// * [liked]
 @BuiltValue()
-abstract class PostDTO implements Built<PostDTO, PostDTOBuilder> {
+abstract class PostResponseDTO
+    implements Built<PostResponseDTO, PostResponseDTOBuilder> {
   @BuiltValueField(wireName: r'id')
   int? get id;
 
   @BuiltValueField(wireName: r'createdWhen')
-  DateTime get createdWhen;
+  DateTime? get createdWhen;
 
   @BuiltValueField(wireName: r'text')
   String? get text;
@@ -35,27 +40,42 @@ abstract class PostDTO implements Built<PostDTO, PostDTOBuilder> {
   @BuiltValueField(wireName: r'userId')
   int? get userId;
 
-  PostDTO._();
+  @BuiltValueField(wireName: r'likeCount')
+  int? get likeCount;
 
-  factory PostDTO([void updates(PostDTOBuilder b)]) = _$PostDTO;
+  @BuiltValueField(wireName: r'commentCount')
+  int? get commentCount;
+
+  @BuiltValueField(wireName: r'repostCount')
+  int? get repostCount;
+
+  @BuiltValueField(wireName: r'liked')
+  bool? get liked;
+
+  PostResponseDTO._();
+
+  factory PostResponseDTO([void updates(PostResponseDTOBuilder b)]) =
+      _$PostResponseDTO;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(PostDTOBuilder b) => b;
+  static void _defaults(PostResponseDTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<PostDTO> get serializer => _$PostDTOSerializer();
+  static Serializer<PostResponseDTO> get serializer =>
+      _$PostResponseDTOSerializer();
 }
 
-class _$PostDTOSerializer implements PrimitiveSerializer<PostDTO> {
+class _$PostResponseDTOSerializer
+    implements PrimitiveSerializer<PostResponseDTO> {
   @override
-  final Iterable<Type> types = const [PostDTO, _$PostDTO];
+  final Iterable<Type> types = const [PostResponseDTO, _$PostResponseDTO];
 
   @override
-  final String wireName = r'PostDTO';
+  final String wireName = r'PostResponseDTO';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    PostDTO object, {
+    PostResponseDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
     if (object.id != null) {
@@ -65,11 +85,13 @@ class _$PostDTOSerializer implements PrimitiveSerializer<PostDTO> {
         specifiedType: const FullType(int),
       );
     }
-    yield r'createdWhen';
-    yield serializers.serialize(
-      object.createdWhen,
-      specifiedType: const FullType(DateTime),
-    );
+    if (object.createdWhen != null) {
+      yield r'createdWhen';
+      yield serializers.serialize(
+        object.createdWhen,
+        specifiedType: const FullType(DateTime),
+      );
+    }
     if (object.text != null) {
       yield r'text';
       yield serializers.serialize(
@@ -91,15 +113,45 @@ class _$PostDTOSerializer implements PrimitiveSerializer<PostDTO> {
         specifiedType: const FullType(int),
       );
     }
+    if (object.likeCount != null) {
+      yield r'likeCount';
+      yield serializers.serialize(
+        object.likeCount,
+        specifiedType: const FullType(int),
+      );
+    }
+    if (object.commentCount != null) {
+      yield r'commentCount';
+      yield serializers.serialize(
+        object.commentCount,
+        specifiedType: const FullType(int),
+      );
+    }
+    if (object.repostCount != null) {
+      yield r'repostCount';
+      yield serializers.serialize(
+        object.repostCount,
+        specifiedType: const FullType(int),
+      );
+    }
+    if (object.liked != null) {
+      yield r'liked';
+      yield serializers.serialize(
+        object.liked,
+        specifiedType: const FullType(bool),
+      );
+    }
   }
 
   @override
   Object serialize(
     Serializers serializers,
-    PostDTO object, {
+    PostResponseDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -107,7 +159,7 @@ class _$PostDTOSerializer implements PrimitiveSerializer<PostDTO> {
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required PostDTOBuilder result,
+    required PostResponseDTOBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
@@ -149,6 +201,34 @@ class _$PostDTOSerializer implements PrimitiveSerializer<PostDTO> {
           ) as int;
           result.userId = valueDes;
           break;
+        case r'likeCount':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(int),
+          ) as int;
+          result.likeCount = valueDes;
+          break;
+        case r'commentCount':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(int),
+          ) as int;
+          result.commentCount = valueDes;
+          break;
+        case r'repostCount':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(int),
+          ) as int;
+          result.repostCount = valueDes;
+          break;
+        case r'liked':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(bool),
+          ) as bool;
+          result.liked = valueDes;
+          break;
         default:
           unhandled.add(key);
           unhandled.add(value);
@@ -158,12 +238,12 @@ class _$PostDTOSerializer implements PrimitiveSerializer<PostDTO> {
   }
 
   @override
-  PostDTO deserialize(
+  PostResponseDTO deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = PostDTOBuilder();
+    final result = PostResponseDTOBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(
@@ -177,4 +257,3 @@ class _$PostDTOSerializer implements PrimitiveSerializer<PostDTO> {
     return result.build();
   }
 }
-

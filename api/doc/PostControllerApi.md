@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 
 # **createPost**
-> PostDTO createPost(title, text, files)
+> PostDTO createPost(text, files)
 
 
 
@@ -26,12 +26,11 @@ Method | HTTP request | Description
 import 'package:openapi/api.dart';
 
 final api = Openapi().getPostControllerApi();
-final String title = title_example; // String | 
 final String text = text_example; // String | 
 final BuiltList<MultipartFile> files = /path/to/file.txt; // BuiltList<MultipartFile> | 
 
 try {
-    final response = api.createPost(title, text, files);
+    final response = api.createPost(text, files);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling PostControllerApi->createPost: $e\n');
@@ -42,9 +41,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **title** | **String**|  | 
  **text** | **String**|  | 
- **files** | [**BuiltList&lt;MultipartFile&gt;**](MultipartFile.md)|  | 
+ **files** | [**BuiltList&lt;MultipartFile&gt;**](MultipartFile.md)|  | [optional] 
 
 ### Return type
 
@@ -102,7 +100,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getAllPosts**
-> BuiltList<PostDTO> getAllPosts()
+> PagePostResponseDTO getAllPosts(sortBy, page, size)
 
 
 
@@ -111,9 +109,12 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api = Openapi().getPostControllerApi();
+final String sortBy = sortBy_example; // String | 
+final int page = 56; // int | 
+final int size = 56; // int | 
 
 try {
-    final response = api.getAllPosts();
+    final response = api.getAllPosts(sortBy, page, size);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling PostControllerApi->getAllPosts: $e\n');
@@ -121,11 +122,16 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **sortBy** | **String**|  | [optional] [default to 'date']
+ **page** | **int**|  | [optional] [default to 0]
+ **size** | **int**|  | [optional] [default to 10]
 
 ### Return type
 
-[**BuiltList&lt;PostDTO&gt;**](PostDTO.md)
+[**PagePostResponseDTO**](PagePostResponseDTO.md)
 
 ### Authorization
 

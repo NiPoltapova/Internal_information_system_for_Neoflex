@@ -4,15 +4,15 @@
 
 // ignore_for_file: unused_element
 import 'package:built_collection/built_collection.dart';
-import 'package:openapi/src/model/like_dto.dart';
 import 'package:openapi/src/model/pageable_object.dart';
+import 'package:openapi/src/model/message_dto.dart';
 import 'package:openapi/src/model/sort_object.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'page_like_dto.g.dart';
+part 'page_message_dto.g.dart';
 
-/// PageLikeDTO
+/// PageMessageDTO
 ///
 /// Properties:
 /// * [totalPages] 
@@ -27,7 +27,7 @@ part 'page_like_dto.g.dart';
 /// * [pageable] 
 /// * [empty] 
 @BuiltValue()
-abstract class PageLikeDTO implements Built<PageLikeDTO, PageLikeDTOBuilder> {
+abstract class PageMessageDTO implements Built<PageMessageDTO, PageMessageDTOBuilder> {
   @BuiltValueField(wireName: r'totalPages')
   int? get totalPages;
 
@@ -38,7 +38,7 @@ abstract class PageLikeDTO implements Built<PageLikeDTO, PageLikeDTOBuilder> {
   int? get size;
 
   @BuiltValueField(wireName: r'content')
-  BuiltList<LikeDTO>? get content;
+  BuiltList<MessageDTO>? get content;
 
   @BuiltValueField(wireName: r'number')
   int? get number;
@@ -61,27 +61,27 @@ abstract class PageLikeDTO implements Built<PageLikeDTO, PageLikeDTOBuilder> {
   @BuiltValueField(wireName: r'empty')
   bool? get empty;
 
-  PageLikeDTO._();
+  PageMessageDTO._();
 
-  factory PageLikeDTO([void updates(PageLikeDTOBuilder b)]) = _$PageLikeDTO;
+  factory PageMessageDTO([void updates(PageMessageDTOBuilder b)]) = _$PageMessageDTO;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(PageLikeDTOBuilder b) => b;
+  static void _defaults(PageMessageDTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<PageLikeDTO> get serializer => _$PageLikeDTOSerializer();
+  static Serializer<PageMessageDTO> get serializer => _$PageMessageDTOSerializer();
 }
 
-class _$PageLikeDTOSerializer implements PrimitiveSerializer<PageLikeDTO> {
+class _$PageMessageDTOSerializer implements PrimitiveSerializer<PageMessageDTO> {
   @override
-  final Iterable<Type> types = const [PageLikeDTO, _$PageLikeDTO];
+  final Iterable<Type> types = const [PageMessageDTO, _$PageMessageDTO];
 
   @override
-  final String wireName = r'PageLikeDTO';
+  final String wireName = r'PageMessageDTO';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    PageLikeDTO object, {
+    PageMessageDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
     if (object.totalPages != null) {
@@ -109,7 +109,7 @@ class _$PageLikeDTOSerializer implements PrimitiveSerializer<PageLikeDTO> {
       yield r'content';
       yield serializers.serialize(
         object.content,
-        specifiedType: const FullType(BuiltList, [FullType(LikeDTO)]),
+        specifiedType: const FullType(BuiltList, [FullType(MessageDTO)]),
       );
     }
     if (object.number != null) {
@@ -166,7 +166,7 @@ class _$PageLikeDTOSerializer implements PrimitiveSerializer<PageLikeDTO> {
   @override
   Object serialize(
     Serializers serializers,
-    PageLikeDTO object, {
+    PageMessageDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
@@ -177,7 +177,7 @@ class _$PageLikeDTOSerializer implements PrimitiveSerializer<PageLikeDTO> {
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required PageLikeDTOBuilder result,
+    required PageMessageDTOBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
@@ -208,8 +208,8 @@ class _$PageLikeDTOSerializer implements PrimitiveSerializer<PageLikeDTO> {
         case r'content':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(LikeDTO)]),
-          ) as BuiltList<LikeDTO>;
+            specifiedType: const FullType(BuiltList, [FullType(MessageDTO)]),
+          ) as BuiltList<MessageDTO>;
           result.content.replace(valueDes);
           break;
         case r'number':
@@ -270,12 +270,12 @@ class _$PageLikeDTOSerializer implements PrimitiveSerializer<PageLikeDTO> {
   }
 
   @override
-  PageLikeDTO deserialize(
+  PageMessageDTO deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = PageLikeDTOBuilder();
+    final result = PageMessageDTOBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(

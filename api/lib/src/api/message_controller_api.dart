@@ -10,7 +10,10 @@ import 'package:dio/dio.dart';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:openapi/src/api_util.dart';
+import 'package:openapi/src/model/message_create_request.dart';
 import 'package:openapi/src/model/message_dto.dart';
+import 'package:openapi/src/model/message_update_request.dart';
+import 'package:openapi/src/model/page_message_dto.dart';
 
 class MessageControllerApi {
 
@@ -24,9 +27,8 @@ class MessageControllerApi {
   /// 
   ///
   /// Parameters:
-  /// * [text] 
   /// * [chatId] 
-  /// * [files] 
+  /// * [messageCreateRequest] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -37,9 +39,8 @@ class MessageControllerApi {
   /// Returns a [Future] containing a [Response] with a [MessageDTO] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<MessageDTO>> createMessage({ 
-    required String text,
     required int chatId,
-    BuiltList<MultipartFile>? files,
+    required MessageCreateRequest messageCreateRequest,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -47,7 +48,7 @@ class MessageControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/messages';
+    final _path = r'/api/chats/{chatId}/messages'.replaceAll('{' r'chatId' '}', encodeQueryParameter(_serializers, chatId, const FullType(int)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -57,28 +58,21 @@ class MessageControllerApi {
         'secure': <Map<String, String>>[],
         ...?extra,
       },
-      contentType: 'multipart/form-data',
+      contentType: 'application/json',
       validateStatus: validateStatus,
     );
-
-    final _queryParameters = <String, dynamic>{
-      r'text': encodeQueryParameter(_serializers, text, const FullType(String)),
-      r'chatId': encodeQueryParameter(_serializers, chatId, const FullType(int)),
-    };
 
     dynamic _bodyData;
 
     try {
-      _bodyData = FormData.fromMap(<String, dynamic>{
-        if (files != null) r'files': files.toList(),
-      });
+      const _type = FullType(MessageCreateRequest);
+      _bodyData = _serializers.serialize(messageCreateRequest, specifiedType: _type);
 
     } catch(error, stackTrace) {
       throw DioException(
          requestOptions: _options.compose(
           _dio.options,
           _path,
-          queryParameters: _queryParameters,
         ),
         type: DioExceptionType.unknown,
         error: error,
@@ -90,7 +84,6 @@ class MessageControllerApi {
       _path,
       data: _bodyData,
       options: _options,
-      queryParameters: _queryParameters,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
@@ -131,7 +124,8 @@ class MessageControllerApi {
   /// 
   ///
   /// Parameters:
-  /// * [id] 
+  /// * [chatId] 
+  /// * [messageId] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -142,7 +136,8 @@ class MessageControllerApi {
   /// Returns a [Future]
   /// Throws [DioException] if API call or serialization fails
   Future<Response<void>> deleteMessage({ 
-    required int id,
+    required int chatId,
+    required int messageId,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -150,7 +145,7 @@ class MessageControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/messages/{id}'.replaceAll('{' r'id' '}', encodeQueryParameter(_serializers, id, const FullType(int)).toString());
+    final _path = r'/api/chats/{chatId}/messages/{messageId}'.replaceAll('{' r'chatId' '}', encodeQueryParameter(_serializers, chatId, const FullType(int)).toString()).replaceAll('{' r'messageId' '}', encodeQueryParameter(_serializers, messageId, const FullType(int)).toString());
     final _options = Options(
       method: r'DELETE',
       headers: <String, dynamic>{
@@ -174,10 +169,14 @@ class MessageControllerApi {
     return _response;
   }
 
-  /// getAllMessages
+  /// getChatMessages
   /// 
   ///
   /// Parameters:
+  /// * [chatId] 
+  /// * [page] 
+  /// * [size] 
+  /// * [sort] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -185,9 +184,13 @@ class MessageControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [BuiltList<MessageDTO>] as data
+  /// Returns a [Future] containing a [Response] with a [PageMessageDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<BuiltList<MessageDTO>>> getAllMessages({ 
+  Future<Response<PageMessageDTO>> getChatMessages({ 
+    required int chatId,
+    int? page = 0,
+    int? size = 10,
+    BuiltList<String>? sort,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -195,7 +198,7 @@ class MessageControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/messages';
+    final _path = r'/api/chats/{chatId}/messages'.replaceAll('{' r'chatId' '}', encodeQueryParameter(_serializers, chatId, const FullType(int)).toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -208,22 +211,29 @@ class MessageControllerApi {
       validateStatus: validateStatus,
     );
 
+    final _queryParameters = <String, dynamic>{
+      if (page != null) r'page': encodeQueryParameter(_serializers, page, const FullType(int)),
+      if (size != null) r'size': encodeQueryParameter(_serializers, size, const FullType(int)),
+      if (sort != null) r'sort': encodeCollectionQueryParameter<String>(_serializers, sort, const FullType(BuiltList, [FullType(String)]), format: ListFormat.multi,),
+    };
+
     final _response = await _dio.request<Object>(
       _path,
       options: _options,
+      queryParameters: _queryParameters,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    BuiltList<MessageDTO>? _responseData;
+    PageMessageDTO? _responseData;
 
     try {
       final rawResponse = _response.data;
       _responseData = rawResponse == null ? null : _serializers.deserialize(
         rawResponse,
-        specifiedType: const FullType(BuiltList, [FullType(MessageDTO)]),
-      ) as BuiltList<MessageDTO>;
+        specifiedType: const FullType(PageMessageDTO),
+      ) as PageMessageDTO;
 
     } catch (error, stackTrace) {
       throw DioException(
@@ -235,7 +245,7 @@ class MessageControllerApi {
       );
     }
 
-    return Response<BuiltList<MessageDTO>>(
+    return Response<PageMessageDTO>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -247,11 +257,12 @@ class MessageControllerApi {
     );
   }
 
-  /// getMessageById
+  /// getMessage
   /// 
   ///
   /// Parameters:
-  /// * [id] 
+  /// * [chatId] 
+  /// * [messageId] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -261,8 +272,9 @@ class MessageControllerApi {
   ///
   /// Returns a [Future] containing a [Response] with a [MessageDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<MessageDTO>> getMessageById({ 
-    required int id,
+  Future<Response<MessageDTO>> getMessage({ 
+    required int chatId,
+    required int messageId,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -270,7 +282,7 @@ class MessageControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/messages/{id}'.replaceAll('{' r'id' '}', encodeQueryParameter(_serializers, id, const FullType(int)).toString());
+    final _path = r'/api/chats/{chatId}/messages/{messageId}'.replaceAll('{' r'chatId' '}', encodeQueryParameter(_serializers, chatId, const FullType(int)).toString()).replaceAll('{' r'messageId' '}', encodeQueryParameter(_serializers, messageId, const FullType(int)).toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -326,9 +338,9 @@ class MessageControllerApi {
   /// 
   ///
   /// Parameters:
-  /// * [id] 
-  /// * [newText] 
-  /// * [newFiles] 
+  /// * [chatId] 
+  /// * [messageId] 
+  /// * [updateRequest] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -339,9 +351,9 @@ class MessageControllerApi {
   /// Returns a [Future] containing a [Response] with a [MessageDTO] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<MessageDTO>> updateMessage({ 
-    required int id,
-    required String newText,
-    BuiltList<MultipartFile>? newFiles,
+    required int chatId,
+    required int messageId,
+    required MessageUpdateRequest updateRequest,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -349,7 +361,7 @@ class MessageControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/messages/{id}'.replaceAll('{' r'id' '}', encodeQueryParameter(_serializers, id, const FullType(int)).toString());
+    final _path = r'/api/chats/{chatId}/messages/{messageId}'.replaceAll('{' r'chatId' '}', encodeQueryParameter(_serializers, chatId, const FullType(int)).toString()).replaceAll('{' r'messageId' '}', encodeQueryParameter(_serializers, messageId, const FullType(int)).toString());
     final _options = Options(
       method: r'PUT',
       headers: <String, dynamic>{
@@ -359,37 +371,15 @@ class MessageControllerApi {
         'secure': <Map<String, String>>[],
         ...?extra,
       },
-      contentType: 'multipart/form-data',
       validateStatus: validateStatus,
     );
 
     final _queryParameters = <String, dynamic>{
-      r'newText': encodeQueryParameter(_serializers, newText, const FullType(String)),
+      r'updateRequest': encodeQueryParameter(_serializers, updateRequest, const FullType(MessageUpdateRequest)),
     };
-
-    dynamic _bodyData;
-
-    try {
-      _bodyData = FormData.fromMap(<String, dynamic>{
-        if (newFiles != null) r'newFiles': newFiles.toList(),
-      });
-
-    } catch(error, stackTrace) {
-      throw DioException(
-         requestOptions: _options.compose(
-          _dio.options,
-          _path,
-          queryParameters: _queryParameters,
-        ),
-        type: DioExceptionType.unknown,
-        error: error,
-        stackTrace: stackTrace,
-      );
-    }
 
     final _response = await _dio.request<Object>(
       _path,
-      data: _bodyData,
       options: _options,
       queryParameters: _queryParameters,
       cancelToken: cancelToken,

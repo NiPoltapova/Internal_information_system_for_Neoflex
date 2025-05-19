@@ -321,7 +321,7 @@ class ChatPageState extends State<ChatPage> {
         MaterialPageRoute(
           builder: (context) => PersonalChatPage(
               chatId: chat.id!,
-              isGroup: isGroup,
+              //isGroup: isGroup,
               currentUserId: _currentUserId!),
         ),
       ),

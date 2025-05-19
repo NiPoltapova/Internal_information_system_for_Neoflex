@@ -3,7 +3,6 @@ import 'package:openapi/openapi.dart';
 class Post {
   int? id;
   DateTime createdWhen;
-  String? title;
   String text;
   List<String> imageUrls;
   int userId;
@@ -15,7 +14,6 @@ class Post {
   Post({
     this.id,
     required this.createdWhen,
-    this.title,
     required this.text,
     required this.imageUrls,
     required this.userId,
@@ -29,9 +27,8 @@ class Post {
     return Post(
       id: dto.id,
       createdWhen: dto.createdWhen ?? DateTime.now(),
-      title: dto.title,
       text: dto.text ?? '',
-      imageUrls: dto.mediaUrls
+      imageUrls: dto.media
               ?.map((m) => m.downloadUrl ?? '')
               .where((url) => url.isNotEmpty)
               .toList() ??
@@ -39,4 +36,19 @@ class Post {
       userId: dto.userId ?? 0,
     );
   }
+  // factory Post.fromResponseDto(PostResponseDTO dto) {
+  //   return Post(
+  //     id: dto.id,
+  //     createdWhen: dto.createdWhen ?? DateTime.now(),
+  //     text: dto.text ?? '',
+  //     imageUrls: dto.media
+  //             ?.where((m) =>
+  //                 m.mediaType == MediaDTOMediaTypeEnum.IMAGE &&
+  //                 (m.downloadUrl?.isNotEmpty ?? false))
+  //             .map((m) => m.downloadUrl!)
+  //             .toList() ??
+  //         [],
+  //     userId: dto.userId ?? 0,
+  //   );
+  // }
 }

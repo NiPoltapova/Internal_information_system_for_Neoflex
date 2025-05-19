@@ -1,12 +1,12 @@
 import 'package:test/test.dart';
 import 'package:openapi/openapi.dart';
 
-// tests for PostDTO
+// tests for PostResponseDTO
 void main() {
-  final instance = PostDTOBuilder();
+  final instance = PostResponseDTOBuilder();
   // TODO add properties to the builder and call build()
 
-  group(PostDTO, () {
+  group(PostResponseDTO, () {
     // int id
     test('to test the property `id`', () async {
       // TODO
@@ -29,6 +29,26 @@ void main() {
 
     // int userId
     test('to test the property `userId`', () async {
+      // TODO
+    });
+
+    // int likeCount
+    test('to test the property `likeCount`', () async {
+      // TODO
+    });
+
+    // int commentCount
+    test('to test the property `commentCount`', () async {
+      // TODO
+    });
+
+    // int repostCount
+    test('to test the property `repostCount`', () async {
+      // TODO
+    });
+
+    // bool liked
+    test('to test the property `liked`', () async {
       // TODO
     });
 

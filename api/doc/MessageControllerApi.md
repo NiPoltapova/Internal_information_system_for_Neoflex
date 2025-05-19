@@ -9,15 +9,15 @@ All URIs are relative to *http://localhost:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**createMessage**](MessageControllerApi.md#createmessage) | **POST** /api/messages | 
-[**deleteMessage**](MessageControllerApi.md#deletemessage) | **DELETE** /api/messages/{id} | 
-[**getAllMessages**](MessageControllerApi.md#getallmessages) | **GET** /api/messages | 
-[**getMessageById**](MessageControllerApi.md#getmessagebyid) | **GET** /api/messages/{id} | 
-[**updateMessage**](MessageControllerApi.md#updatemessage) | **PUT** /api/messages/{id} | 
+[**createMessage**](MessageControllerApi.md#createmessage) | **POST** /api/chats/{chatId}/messages | 
+[**deleteMessage**](MessageControllerApi.md#deletemessage) | **DELETE** /api/chats/{chatId}/messages/{messageId} | 
+[**getChatMessages**](MessageControllerApi.md#getchatmessages) | **GET** /api/chats/{chatId}/messages | 
+[**getMessage**](MessageControllerApi.md#getmessage) | **GET** /api/chats/{chatId}/messages/{messageId} | 
+[**updateMessage**](MessageControllerApi.md#updatemessage) | **PUT** /api/chats/{chatId}/messages/{messageId} | 
 
 
 # **createMessage**
-> MessageDTO createMessage(text, chatId, files)
+> MessageDTO createMessage(chatId, messageCreateRequest)
 
 
 
@@ -26,12 +26,11 @@ Method | HTTP request | Description
 import 'package:openapi/api.dart';
 
 final api = Openapi().getMessageControllerApi();
-final String text = text_example; // String | 
 final int chatId = 789; // int | 
-final BuiltList<MultipartFile> files = /path/to/file.txt; // BuiltList<MultipartFile> | 
+final MessageCreateRequest messageCreateRequest = ; // MessageCreateRequest | 
 
 try {
-    final response = api.createMessage(text, chatId, files);
+    final response = api.createMessage(chatId, messageCreateRequest);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling MessageControllerApi->createMessage: $e\n');
@@ -42,9 +41,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **text** | **String**|  | 
  **chatId** | **int**|  | 
- **files** | [**BuiltList&lt;MultipartFile&gt;**](MultipartFile.md)|  | [optional] 
+ **messageCreateRequest** | [**MessageCreateRequest**](MessageCreateRequest.md)|  | 
 
 ### Return type
 
@@ -56,13 +54,13 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: multipart/form-data
+ - **Content-Type**: application/json
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **deleteMessage**
-> deleteMessage(id)
+> deleteMessage(chatId, messageId)
 
 
 
@@ -71,10 +69,11 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api = Openapi().getMessageControllerApi();
-final int id = 789; // int | 
+final int chatId = 789; // int | 
+final int messageId = 789; // int | 
 
 try {
-    api.deleteMessage(id);
+    api.deleteMessage(chatId, messageId);
 } catch on DioException (e) {
     print('Exception when calling MessageControllerApi->deleteMessage: $e\n');
 }
@@ -84,7 +83,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **int**|  | 
+ **chatId** | **int**|  | 
+ **messageId** | **int**|  | 
 
 ### Return type
 
@@ -101,8 +101,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getAllMessages**
-> BuiltList<MessageDTO> getAllMessages()
+# **getChatMessages**
+> PageMessageDTO getChatMessages(chatId, page, size, sort)
 
 
 
@@ -111,21 +111,31 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api = Openapi().getMessageControllerApi();
+final int chatId = 789; // int | 
+final int page = 56; // int | 
+final int size = 56; // int | 
+final BuiltList<String> sort = ; // BuiltList<String> | 
 
 try {
-    final response = api.getAllMessages();
+    final response = api.getChatMessages(chatId, page, size, sort);
     print(response);
 } catch on DioException (e) {
-    print('Exception when calling MessageControllerApi->getAllMessages: $e\n');
+    print('Exception when calling MessageControllerApi->getChatMessages: $e\n');
 }
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **chatId** | **int**|  | 
+ **page** | **int**|  | [optional] [default to 0]
+ **size** | **int**|  | [optional] [default to 10]
+ **sort** | [**BuiltList&lt;String&gt;**](String.md)|  | [optional] [default to ListBuilder()]
 
 ### Return type
 
-[**BuiltList&lt;MessageDTO&gt;**](MessageDTO.md)
+[**PageMessageDTO**](PageMessageDTO.md)
 
 ### Authorization
 
@@ -138,8 +148,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getMessageById**
-> MessageDTO getMessageById(id)
+# **getMessage**
+> MessageDTO getMessage(chatId, messageId)
 
 
 
@@ -148,13 +158,14 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api = Openapi().getMessageControllerApi();
-final int id = 789; // int | 
+final int chatId = 789; // int | 
+final int messageId = 789; // int | 
 
 try {
-    final response = api.getMessageById(id);
+    final response = api.getMessage(chatId, messageId);
     print(response);
 } catch on DioException (e) {
-    print('Exception when calling MessageControllerApi->getMessageById: $e\n');
+    print('Exception when calling MessageControllerApi->getMessage: $e\n');
 }
 ```
 
@@ -162,7 +173,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **int**|  | 
+ **chatId** | **int**|  | 
+ **messageId** | **int**|  | 
 
 ### Return type
 
@@ -180,7 +192,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateMessage**
-> MessageDTO updateMessage(id, newText, newFiles)
+> MessageDTO updateMessage(chatId, messageId, updateRequest)
 
 
 
@@ -189,12 +201,12 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api = Openapi().getMessageControllerApi();
-final int id = 789; // int | 
-final String newText = newText_example; // String | 
-final BuiltList<MultipartFile> newFiles = /path/to/file.txt; // BuiltList<MultipartFile> | 
+final int chatId = 789; // int | 
+final int messageId = 789; // int | 
+final MessageUpdateRequest updateRequest = ; // MessageUpdateRequest | 
 
 try {
-    final response = api.updateMessage(id, newText, newFiles);
+    final response = api.updateMessage(chatId, messageId, updateRequest);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling MessageControllerApi->updateMessage: $e\n');
@@ -205,9 +217,9 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **int**|  | 
- **newText** | **String**|  | 
- **newFiles** | [**BuiltList&lt;MultipartFile&gt;**](MultipartFile.md)|  | [optional] 
+ **chatId** | **int**|  | 
+ **messageId** | **int**|  | 
+ **updateRequest** | [**MessageUpdateRequest**](.md)|  | 
 
 ### Return type
 
@@ -219,7 +231,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: multipart/form-data
+ - **Content-Type**: Not defined
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

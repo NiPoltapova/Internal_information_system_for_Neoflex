@@ -8,8 +8,8 @@ import 'package:openapi/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalElements** | **int** |  | [optional] 
 **totalPages** | **int** |  | [optional] 
+**totalElements** | **int** |  | [optional] 
 **size** | **int** |  | [optional] 
 **content** | [**BuiltList&lt;ChatSummaryDTO&gt;**](ChatSummaryDTO.md) |  | [optional] 
 **number** | **int** |  | [optional] 

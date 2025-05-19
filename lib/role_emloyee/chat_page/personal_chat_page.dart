@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:built_collection/built_collection.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -75,20 +76,18 @@ class _PersonalChatPageState extends State<PersonalChatPage> {
           throw Exception('Чат не найден');
         }
 
-        // Загрузка всех сообщений (с фильтрацией на клиенте)
-        final messagesResponse = await messageApi.getAllMessages(
+        // Загрузка сообщений для конкретного чата
+        final messagesResponse = await messageApi.getChatMessages(
+          chatId: widget.chatId,
           headers: {'Authorization': 'Bearer $token'},
         );
 
-        final messagesData = messagesResponse.data;
-        final filteredMessages = messagesData
-            ?.where((message) => message.chatId == widget.chatId)
-            .toList();
+        final messagesData = messagesResponse.data?.content?.toList() ?? [];
 
         if (mounted) {
           setState(() {
             _chat = chatData;
-            _messages = filteredMessages ?? [];
+            _messages = messagesData;
             _isLoading = false;
           });
           _scrollToBottom();
@@ -118,7 +117,6 @@ class _PersonalChatPageState extends State<PersonalChatPage> {
     }
   }
 
-// Добавляем отсутствующий метод
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Реализация прокрутки, если у вас есть ScrollController
@@ -141,14 +139,22 @@ class _PersonalChatPageState extends State<PersonalChatPage> {
       if (token == null) throw Exception('Нет токена авторизации');
 
       final messageApi = GetIt.I<Openapi>().getMessageControllerApi();
+
+      // Подготавливаем файлы в формате Uint8List
       final files = _selectedFiles
-          .map((file) => MultipartFile.fromFileSync(file.path!))
+          .map((file) => File(file.path!).readAsBytesSync())
           .toList();
 
+      // Создаем запрос на создание сообщения
+      final request = MessageCreateRequest(
+        (b) => b
+          ..text = _messageController.text
+          ..files = files.isNotEmpty ? ListBuilder<Uint8List>(files) : null,
+      );
+
       final response = await messageApi.createMessage(
-        text: _messageController.text,
         chatId: widget.chatId,
-        files: files.isNotEmpty ? BuiltList(files) : null,
+        messageCreateRequest: request,
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -161,8 +167,9 @@ class _PersonalChatPageState extends State<PersonalChatPage> {
         _scrollToBottom();
       }
     } catch (e) {
+      debugPrint('Ошибка отправки сообщения: $e');
       if (mounted) {
-        _showErrorSnackbar('Ошибка отправки сообщения');
+        _showErrorSnackbar('Ошибка отправки сообщения: ${e.toString()}');
       }
     } finally {
       if (mounted) {

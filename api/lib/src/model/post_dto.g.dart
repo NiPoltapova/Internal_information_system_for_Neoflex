@@ -10,13 +10,11 @@ class _$PostDTO extends PostDTO {
   @override
   final int? id;
   @override
-  final DateTime? createdWhen;
-  @override
-  final String? title;
+  final DateTime createdWhen;
   @override
   final String? text;
   @override
-  final BuiltList<MediaDTO>? mediaUrls;
+  final BuiltList<MediaDTO>? media;
   @override
   final int? userId;
 
@@ -24,13 +22,11 @@ class _$PostDTO extends PostDTO {
       (new PostDTOBuilder()..update(updates))._build();
 
   _$PostDTO._(
-      {this.id,
-      this.createdWhen,
-      this.title,
-      this.text,
-      this.mediaUrls,
-      this.userId})
-      : super._();
+      {this.id, required this.createdWhen, this.text, this.media, this.userId})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(
+        createdWhen, r'PostDTO', 'createdWhen');
+  }
 
   @override
   PostDTO rebuild(void Function(PostDTOBuilder) updates) =>
@@ -45,9 +41,8 @@ class _$PostDTO extends PostDTO {
     return other is PostDTO &&
         id == other.id &&
         createdWhen == other.createdWhen &&
-        title == other.title &&
         text == other.text &&
-        mediaUrls == other.mediaUrls &&
+        media == other.media &&
         userId == other.userId;
   }
 
@@ -56,9 +51,8 @@ class _$PostDTO extends PostDTO {
     var _$hash = 0;
     _$hash = $jc(_$hash, id.hashCode);
     _$hash = $jc(_$hash, createdWhen.hashCode);
-    _$hash = $jc(_$hash, title.hashCode);
     _$hash = $jc(_$hash, text.hashCode);
-    _$hash = $jc(_$hash, mediaUrls.hashCode);
+    _$hash = $jc(_$hash, media.hashCode);
     _$hash = $jc(_$hash, userId.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -69,9 +63,8 @@ class _$PostDTO extends PostDTO {
     return (newBuiltValueToStringHelper(r'PostDTO')
           ..add('id', id)
           ..add('createdWhen', createdWhen)
-          ..add('title', title)
           ..add('text', text)
-          ..add('mediaUrls', mediaUrls)
+          ..add('media', media)
           ..add('userId', userId))
         .toString();
   }
@@ -88,19 +81,14 @@ class PostDTOBuilder implements Builder<PostDTO, PostDTOBuilder> {
   DateTime? get createdWhen => _$this._createdWhen;
   set createdWhen(DateTime? createdWhen) => _$this._createdWhen = createdWhen;
 
-  String? _title;
-  String? get title => _$this._title;
-  set title(String? title) => _$this._title = title;
-
   String? _text;
   String? get text => _$this._text;
   set text(String? text) => _$this._text = text;
 
-  ListBuilder<MediaDTO>? _mediaUrls;
-  ListBuilder<MediaDTO> get mediaUrls =>
-      _$this._mediaUrls ??= new ListBuilder<MediaDTO>();
-  set mediaUrls(ListBuilder<MediaDTO>? mediaUrls) =>
-      _$this._mediaUrls = mediaUrls;
+  ListBuilder<MediaDTO>? _media;
+  ListBuilder<MediaDTO> get media =>
+      _$this._media ??= new ListBuilder<MediaDTO>();
+  set media(ListBuilder<MediaDTO>? media) => _$this._media = media;
 
   int? _userId;
   int? get userId => _$this._userId;
@@ -115,9 +103,8 @@ class PostDTOBuilder implements Builder<PostDTO, PostDTOBuilder> {
     if ($v != null) {
       _id = $v.id;
       _createdWhen = $v.createdWhen;
-      _title = $v.title;
       _text = $v.text;
-      _mediaUrls = $v.mediaUrls?.toBuilder();
+      _media = $v.media?.toBuilder();
       _userId = $v.userId;
       _$v = null;
     }
@@ -144,17 +131,17 @@ class PostDTOBuilder implements Builder<PostDTO, PostDTOBuilder> {
       _$result = _$v ??
           new _$PostDTO._(
             id: id,
-            createdWhen: createdWhen,
-            title: title,
+            createdWhen: BuiltValueNullFieldError.checkNotNull(
+                createdWhen, r'PostDTO', 'createdWhen'),
             text: text,
-            mediaUrls: _mediaUrls?.build(),
+            media: _media?.build(),
             userId: userId,
           );
     } catch (_) {
       late String _$failedField;
       try {
-        _$failedField = 'mediaUrls';
-        _mediaUrls?.build();
+        _$failedField = 'media';
+        _media?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'PostDTO', _$failedField, e.toString());

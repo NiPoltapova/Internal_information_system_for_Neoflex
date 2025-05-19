@@ -17,8 +17,23 @@ void main() {
       // TODO
     });
 
-    //Future<UserDTO> adminUpdateUser(int id, UserExtendedDTO userExtendedDTO) async
+    //Future<BuiltList<UserExtendedDTO>> adminGetAllUsers() async
+    test('test adminGetAllUsers', () async {
+      // TODO
+    });
+
+    //Future<UserExtendedDTO> adminGetUser(int id) async
+    test('test adminGetUser', () async {
+      // TODO
+    });
+
+    //Future<UserDTO> adminUpdateUser(int id, UserDTO userDTO) async
     test('test adminUpdateUser', () async {
+      // TODO
+    });
+
+    //Future<UserDTO> adminUploadAvatar(int id, MultipartFile file) async
+    test('test adminUploadAvatar', () async {
       // TODO
     });
 
@@ -47,7 +62,7 @@ void main() {
       // TODO
     });
 
-    //Future<String> uploadAvatar(MultipartFile file) async
+    //Future<UserDTO> uploadAvatar(MultipartFile file) async
     test('test uploadAvatar', () async {
       // TODO
     });

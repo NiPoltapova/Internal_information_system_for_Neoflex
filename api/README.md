@@ -88,11 +88,11 @@ Class | Method | HTTP request | Description
 [*LikeControllerApi*](doc/LikeControllerApi.md) | [**getLikesByPost**](doc/LikeControllerApi.md#getlikesbypost) | **GET** /api/posts/{postId}/likes | 
 [*LikeControllerApi*](doc/LikeControllerApi.md) | [**getLikesCount**](doc/LikeControllerApi.md#getlikescount) | **GET** /api/posts/{postId}/likes/count | 
 [*MediaControllerApi*](doc/MediaControllerApi.md) | [**downloadMedia**](doc/MediaControllerApi.md#downloadmedia) | **GET** /api/media/{filename} | 
-[*MessageControllerApi*](doc/MessageControllerApi.md) | [**createMessage**](doc/MessageControllerApi.md#createmessage) | **POST** /api/messages | 
-[*MessageControllerApi*](doc/MessageControllerApi.md) | [**deleteMessage**](doc/MessageControllerApi.md#deletemessage) | **DELETE** /api/messages/{id} | 
-[*MessageControllerApi*](doc/MessageControllerApi.md) | [**getAllMessages**](doc/MessageControllerApi.md#getallmessages) | **GET** /api/messages | 
-[*MessageControllerApi*](doc/MessageControllerApi.md) | [**getMessageById**](doc/MessageControllerApi.md#getmessagebyid) | **GET** /api/messages/{id} | 
-[*MessageControllerApi*](doc/MessageControllerApi.md) | [**updateMessage**](doc/MessageControllerApi.md#updatemessage) | **PUT** /api/messages/{id} | 
+[*MessageControllerApi*](doc/MessageControllerApi.md) | [**createMessage**](doc/MessageControllerApi.md#createmessage) | **POST** /api/chats/{chatId}/messages | 
+[*MessageControllerApi*](doc/MessageControllerApi.md) | [**deleteMessage**](doc/MessageControllerApi.md#deletemessage) | **DELETE** /api/chats/{chatId}/messages/{messageId} | 
+[*MessageControllerApi*](doc/MessageControllerApi.md) | [**getChatMessages**](doc/MessageControllerApi.md#getchatmessages) | **GET** /api/chats/{chatId}/messages | 
+[*MessageControllerApi*](doc/MessageControllerApi.md) | [**getMessage**](doc/MessageControllerApi.md#getmessage) | **GET** /api/chats/{chatId}/messages/{messageId} | 
+[*MessageControllerApi*](doc/MessageControllerApi.md) | [**updateMessage**](doc/MessageControllerApi.md#updatemessage) | **PUT** /api/chats/{chatId}/messages/{messageId} | 
 [*NotificationControllerApi*](doc/NotificationControllerApi.md) | [**getNotifications**](doc/NotificationControllerApi.md#getnotifications) | **GET** /api/notifications | 
 [*NotificationControllerApi*](doc/NotificationControllerApi.md) | [**markAsRead**](doc/NotificationControllerApi.md#markasread) | **PATCH** /api/notifications/{id}/read | 
 [*PostControllerApi*](doc/PostControllerApi.md) | [**createPost**](doc/PostControllerApi.md#createpost) | **POST** /api/posts | 
@@ -133,15 +133,20 @@ Class | Method | HTTP request | Description
  - [FileDTO](doc/FileDTO.md)
  - [LikeDTO](doc/LikeDTO.md)
  - [MediaDTO](doc/MediaDTO.md)
+ - [MessageCreateRequest](doc/MessageCreateRequest.md)
  - [MessageDTO](doc/MessageDTO.md)
  - [MessageNotificationDTO](doc/MessageNotificationDTO.md)
+ - [MessageUpdateRequest](doc/MessageUpdateRequest.md)
  - [PageBookingDTO](doc/PageBookingDTO.md)
  - [PageChatSummaryDTO](doc/PageChatSummaryDTO.md)
  - [PageLikeDTO](doc/PageLikeDTO.md)
+ - [PageMessageDTO](doc/PageMessageDTO.md)
+ - [PagePostResponseDTO](doc/PagePostResponseDTO.md)
  - [PageUserDTO](doc/PageUserDTO.md)
  - [Pageable](doc/Pageable.md)
  - [PageableObject](doc/PageableObject.md)
  - [PostDTO](doc/PostDTO.md)
+ - [PostResponseDTO](doc/PostResponseDTO.md)
  - [RepostDTO](doc/RepostDTO.md)
  - [SortObject](doc/SortObject.md)
  - [UserDTO](doc/UserDTO.md)

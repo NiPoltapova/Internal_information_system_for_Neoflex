@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'page_booking_dto.dart';
+part of 'page_post_response_dto.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$PageBookingDTO extends PageBookingDTO {
+class _$PagePostResponseDTO extends PagePostResponseDTO {
   @override
   final int? totalPages;
   @override
@@ -14,7 +14,7 @@ class _$PageBookingDTO extends PageBookingDTO {
   @override
   final int? size;
   @override
-  final BuiltList<BookingDTO>? content;
+  final BuiltList<PostResponseDTO>? content;
   @override
   final int? number;
   @override
@@ -30,10 +30,11 @@ class _$PageBookingDTO extends PageBookingDTO {
   @override
   final bool? empty;
 
-  factory _$PageBookingDTO([void Function(PageBookingDTOBuilder)? updates]) =>
-      (new PageBookingDTOBuilder()..update(updates))._build();
+  factory _$PagePostResponseDTO(
+          [void Function(PagePostResponseDTOBuilder)? updates]) =>
+      (new PagePostResponseDTOBuilder()..update(updates))._build();
 
-  _$PageBookingDTO._(
+  _$PagePostResponseDTO._(
       {this.totalPages,
       this.totalElements,
       this.size,
@@ -48,17 +49,18 @@ class _$PageBookingDTO extends PageBookingDTO {
       : super._();
 
   @override
-  PageBookingDTO rebuild(void Function(PageBookingDTOBuilder) updates) =>
+  PagePostResponseDTO rebuild(
+          void Function(PagePostResponseDTOBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  PageBookingDTOBuilder toBuilder() =>
-      new PageBookingDTOBuilder()..replace(this);
+  PagePostResponseDTOBuilder toBuilder() =>
+      new PagePostResponseDTOBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is PageBookingDTO &&
+    return other is PagePostResponseDTO &&
         totalPages == other.totalPages &&
         totalElements == other.totalElements &&
         size == other.size &&
@@ -92,7 +94,7 @@ class _$PageBookingDTO extends PageBookingDTO {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'PageBookingDTO')
+    return (newBuiltValueToStringHelper(r'PagePostResponseDTO')
           ..add('totalPages', totalPages)
           ..add('totalElements', totalElements)
           ..add('size', size)
@@ -108,9 +110,9 @@ class _$PageBookingDTO extends PageBookingDTO {
   }
 }
 
-class PageBookingDTOBuilder
-    implements Builder<PageBookingDTO, PageBookingDTOBuilder> {
-  _$PageBookingDTO? _$v;
+class PagePostResponseDTOBuilder
+    implements Builder<PagePostResponseDTO, PagePostResponseDTOBuilder> {
+  _$PagePostResponseDTO? _$v;
 
   int? _totalPages;
   int? get totalPages => _$this._totalPages;
@@ -125,10 +127,11 @@ class PageBookingDTOBuilder
   int? get size => _$this._size;
   set size(int? size) => _$this._size = size;
 
-  ListBuilder<BookingDTO>? _content;
-  ListBuilder<BookingDTO> get content =>
-      _$this._content ??= new ListBuilder<BookingDTO>();
-  set content(ListBuilder<BookingDTO>? content) => _$this._content = content;
+  ListBuilder<PostResponseDTO>? _content;
+  ListBuilder<PostResponseDTO> get content =>
+      _$this._content ??= new ListBuilder<PostResponseDTO>();
+  set content(ListBuilder<PostResponseDTO>? content) =>
+      _$this._content = content;
 
   int? _number;
   int? get number => _$this._number;
@@ -160,11 +163,11 @@ class PageBookingDTOBuilder
   bool? get empty => _$this._empty;
   set empty(bool? empty) => _$this._empty = empty;
 
-  PageBookingDTOBuilder() {
-    PageBookingDTO._defaults(this);
+  PagePostResponseDTOBuilder() {
+    PagePostResponseDTO._defaults(this);
   }
 
-  PageBookingDTOBuilder get _$this {
+  PagePostResponseDTOBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _totalPages = $v.totalPages;
@@ -184,24 +187,24 @@ class PageBookingDTOBuilder
   }
 
   @override
-  void replace(PageBookingDTO other) {
+  void replace(PagePostResponseDTO other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$PageBookingDTO;
+    _$v = other as _$PagePostResponseDTO;
   }
 
   @override
-  void update(void Function(PageBookingDTOBuilder)? updates) {
+  void update(void Function(PagePostResponseDTOBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  PageBookingDTO build() => _build();
+  PagePostResponseDTO build() => _build();
 
-  _$PageBookingDTO _build() {
-    _$PageBookingDTO _$result;
+  _$PagePostResponseDTO _build() {
+    _$PagePostResponseDTO _$result;
     try {
       _$result = _$v ??
-          new _$PageBookingDTO._(
+          new _$PagePostResponseDTO._(
             totalPages: totalPages,
             totalElements: totalElements,
             size: size,
@@ -227,7 +230,7 @@ class PageBookingDTOBuilder
         _pageable?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'PageBookingDTO', _$failedField, e.toString());
+            r'PagePostResponseDTO', _$failedField, e.toString());
       }
       rethrow;
     }

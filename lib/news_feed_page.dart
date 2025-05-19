@@ -40,8 +40,8 @@ class NewsFeedState extends State<NewsFeed> {
   void initState() {
     super.initState();
     filteredPosts = [];
-    loadPosts();
     _loadUserRole();
+    loadPosts();
   }
 
   Future<void> _loadUserRole() async {
@@ -53,38 +53,75 @@ class NewsFeedState extends State<NewsFeed> {
       final userApi = GetIt.I<Openapi>().getUserControllerApi();
       final response = await userApi.getCurrentUser();
 
-      if (response.data == null || response.data!.roleName == null) {
-        throw Exception('User data or role is null');
+      if (response.statusCode != 200 || response.data == null) {
+        throw Exception('Failed to load user role');
       }
 
-      if (mounted) {
-        setState(() {
-          _currentUserRole = response.data!.roleName!.toUpperCase().trim();
-          _isAdmin = _currentUserRole == 'ROLE_ADMIN';
-          _isRoleLoaded = true;
-          print('User role loaded: $_currentUserRole, isAdmin: $_isAdmin');
-        });
-      }
+      setState(() {
+        _currentUserRole = response.data!.roleName?.toUpperCase().trim();
+        _isAdmin = _currentUserRole == 'ROLE_ADMIN';
+        _isRoleLoaded = true;
+      });
     } on DioException catch (e) {
-      print('DioError loading user role: ${e.message}');
       if (e.response?.statusCode == 401) {
-        // Токен невалиден - нужно разлогинить
         _handleInvalidToken();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка загрузки роли: ${e.message}')),
+        );
       }
     } catch (e) {
-      print('Error loading user role: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка: $e')),
+      );
     } finally {
-      if (mounted && !_isRoleLoaded) {
+      if (mounted) {
         setState(() {
-          _isRoleLoaded = true; // Чтобы не заблокировать UI
+          _isRoleLoaded = true;
         });
       }
     }
   }
 
+  // Future<void> _loadUserRole() async {
+  //   try {
+  //     setState(() {
+  //       _isRoleLoaded = false;
+  //     });
+
+  //     final userApi = GetIt.I<Openapi>().getUserControllerApi();
+  //     final response = await userApi.getCurrentUser();
+
+  //     if (response.data == null || response.data!.roleName == null) {
+  //       throw Exception('User data or role is null');
+  //     }
+
+  //     if (mounted) {
+  //       setState(() {
+  //         _currentUserRole = response.data!.roleName!.toUpperCase().trim();
+  //         _isAdmin = _currentUserRole == 'ROLE_ADMIN';
+  //         _isRoleLoaded = true;
+  //         print('User role loaded: $_currentUserRole, isAdmin: $_isAdmin');
+  //       });
+  //     }
+  //   } on DioException catch (e) {
+  //     print('DioError loading user role: ${e.message}');
+  //     if (e.response?.statusCode == 401) {
+  //       // Токен невалиден - нужно разлогинить
+  //       _handleInvalidToken();
+  //     }
+  //   } catch (e) {
+  //     print('Error loading user role: $e');
+  //   } finally {
+  //     if (mounted && !_isRoleLoaded) {
+  //       setState(() {
+  //         _isRoleLoaded = true; // Чтобы не заблокировать UI
+  //       });
+  //     }
+  //   }
+  // }
+
   void _handleInvalidToken() {
-    // Очищаем токены и перенаправляем на логин
-    // Реализация зависит от вашей системы хранения токенов
     Navigator.pushNamedAndRemoveUntil(
       context,
       AppRoutes.loginPage,
@@ -93,65 +130,130 @@ class NewsFeedState extends State<NewsFeed> {
   }
 
   Future<void> loadPosts() async {
+    if (!mounted) return;
+
     setState(() {
       isLoading = true;
     });
 
-    print('Starting to load posts...');
-
     try {
       final postApi = GetIt.I<Openapi>().getPostControllerApi();
-      final response = await postApi.getAllPosts().catchError((error) async {
-        if (error is DioException && error.response?.statusCode == 401) {
-          // Попытка обновить токен
-          await _refreshToken();
-          // Повторный запрос после обновления токена
-          return await postApi.getAllPosts();
-        }
-        throw error;
-      });
+      final response = await postApi.getAllPosts();
 
-      print('Response status: ${response.statusCode}');
-      print('Response data length: ${response.data?.length ?? 0}');
-
-      if (response.data == null) {
-        print('No posts data received');
-        throw Exception('No posts data received');
+      if (response.statusCode != 200 || response.data == null) {
+        throw Exception('Failed to load posts');
       }
 
-      List<Post> newPosts = [];
-      for (var postDto in response.data!) {
-        print('Processing post with ID: ${postDto.id}'); // Добавлено
-        print('Post text: ${postDto.text}'); // Добавлено
-        print('Media URLs count: ${postDto.mediaUrls?.length ?? 0}');
-        newPosts.add(Post.fromDto(postDto));
-        showCommentInput.add(false);
-      }
+      // Получаем контент из PagePostResponseDTO
+      final pageResponse = response.data!;
+      final postDTOs = pageResponse.content ?? BuiltList<PostResponseDTO>();
 
-      print('Successfully loaded ${newPosts.length} posts');
+      // Конвертируем DTO в наши модели
+      final newPosts = postDTOs
+          .map((dto) => Post(
+                id: dto.id,
+                createdWhen: dto.createdWhen ?? DateTime.now(),
+                text: dto.text ?? '',
+                imageUrls: dto.media
+                        ?.map((m) => m.downloadUrl ?? '')
+                        .where((url) => url.isNotEmpty)
+                        .toList() ??
+                    [],
+                userId: dto.userId ?? 0,
+                likesCount: dto.likeCount ?? 0,
+                isLiked: dto.liked ?? false,
+              ))
+          .toList();
 
       setState(() {
         posts = newPosts;
         filteredPosts = List.from(newPosts);
+        showCommentInput = List.filled(newPosts.length, false);
         _applySort();
-        isLoading = false;
       });
     } on DioException catch (e) {
-      print('DioError loading posts: ${e.message}');
-      print('Response data: ${e.response?.data}');
       if (e.response?.statusCode == 401) {
         _handleInvalidToken();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка загрузки постов: ${e.message}')),
+        );
       }
-      setState(() {
-        isLoading = false;
-      });
     } catch (e) {
-      print('Error loading posts: $e');
-      setState(() {
-        isLoading = false;
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка: $e')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
+
+  // Future<void> loadPosts() async {
+  //   if (!mounted) return;
+
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+
+  //   print('Starting to load posts...');
+
+  //   try {
+  //     final postApi = GetIt.I<Openapi>().getPostControllerApi();
+  //     final response = await postApi.getAllPosts().catchError((error) async {
+  //       if (error is DioException && error.response?.statusCode == 401) {
+  //         // Попытка обновить токен
+  //         await _refreshToken();
+  //         // Повторный запрос после обновления токена
+  //         return await postApi.getAllPosts();
+  //       }
+  //       throw error;
+  //     });
+
+  //     print('Response status: ${response.statusCode}');
+  //     print('Response data length: ${response.data?.length ?? 0}');
+
+  //     if (response.data == null) {
+  //       print('No posts data received');
+  //       throw Exception('No posts data received');
+  //     }
+
+  //     List<Post> newPosts = [];
+  //     for (var postDto in response.data!) {
+  //       print('Processing post with ID: ${postDto.id}'); // Добавлено
+  //       print('Post text: ${postDto.text}'); // Добавлено
+  //       print('Media URLs count: ${postDto.mediaUrls?.length ?? 0}');
+  //       newPosts.add(Post.fromDto(postDto));
+  //       showCommentInput.add(false);
+  //     }
+
+  //     print('Successfully loaded ${newPosts.length} posts');
+
+  //     setState(() {
+  //       posts = newPosts;
+  //       filteredPosts = List.from(newPosts);
+  //       _applySort();
+  //       isLoading = false;
+  //     });
+  //   } on DioException catch (e) {
+  //     print('DioError loading posts: ${e.message}');
+  //     print('Response data: ${e.response?.data}');
+  //     if (e.response?.statusCode == 401) {
+  //       _handleInvalidToken();
+  //     }
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   } catch (e) {
+  //     print('Error loading posts: $e');
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
 
   Future<void> _refreshToken() async {
     try {
@@ -330,9 +432,8 @@ class NewsFeedState extends State<NewsFeed> {
           builder: (context) => EditPostPage(
             postId: post.id,
             initialText: post.text,
-            initialTitle: post.title,
             initialImagePaths: post.imageUrls,
-            onSave: (newTitle, newText, newImages) async {
+            onSave: (newText, newImages) async {
               try {
                 final postApi = GetIt.I<Openapi>().getPostControllerApi();
                 final files = newImages
@@ -342,7 +443,6 @@ class NewsFeedState extends State<NewsFeed> {
                 if (post.id == null) {
                   // Создание нового поста
                   await postApi.createPost(
-                    title: newTitle ?? '',
                     text: newText,
                     files: BuiltList(files),
                   );
@@ -350,9 +450,7 @@ class NewsFeedState extends State<NewsFeed> {
                   // Обновление существующего поста
                   await postApi.updatePost(
                     id: post.id!,
-                    postDTO: PostDTO((b) => b
-                      ..title = newTitle
-                      ..text = newText),
+                    postDTO: PostDTO((b) => b..text = newText),
                     files: BuiltList(files),
                   );
                 }

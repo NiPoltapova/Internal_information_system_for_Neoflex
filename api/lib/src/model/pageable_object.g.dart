@@ -14,9 +14,9 @@ class _$PageableObject extends PageableObject {
   @override
   final bool? paged;
   @override
-  final int? pageNumber;
-  @override
   final int? pageSize;
+  @override
+  final int? pageNumber;
   @override
   final bool? unpaged;
 
@@ -27,8 +27,8 @@ class _$PageableObject extends PageableObject {
       {this.offset,
       this.sort,
       this.paged,
-      this.pageNumber,
       this.pageSize,
+      this.pageNumber,
       this.unpaged})
       : super._();
 
@@ -47,8 +47,8 @@ class _$PageableObject extends PageableObject {
         offset == other.offset &&
         sort == other.sort &&
         paged == other.paged &&
-        pageNumber == other.pageNumber &&
         pageSize == other.pageSize &&
+        pageNumber == other.pageNumber &&
         unpaged == other.unpaged;
   }
 
@@ -58,8 +58,8 @@ class _$PageableObject extends PageableObject {
     _$hash = $jc(_$hash, offset.hashCode);
     _$hash = $jc(_$hash, sort.hashCode);
     _$hash = $jc(_$hash, paged.hashCode);
-    _$hash = $jc(_$hash, pageNumber.hashCode);
     _$hash = $jc(_$hash, pageSize.hashCode);
+    _$hash = $jc(_$hash, pageNumber.hashCode);
     _$hash = $jc(_$hash, unpaged.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -71,8 +71,8 @@ class _$PageableObject extends PageableObject {
           ..add('offset', offset)
           ..add('sort', sort)
           ..add('paged', paged)
-          ..add('pageNumber', pageNumber)
           ..add('pageSize', pageSize)
+          ..add('pageNumber', pageNumber)
           ..add('unpaged', unpaged))
         .toString();
   }
@@ -94,13 +94,13 @@ class PageableObjectBuilder
   bool? get paged => _$this._paged;
   set paged(bool? paged) => _$this._paged = paged;
 
-  int? _pageNumber;
-  int? get pageNumber => _$this._pageNumber;
-  set pageNumber(int? pageNumber) => _$this._pageNumber = pageNumber;
-
   int? _pageSize;
   int? get pageSize => _$this._pageSize;
   set pageSize(int? pageSize) => _$this._pageSize = pageSize;
+
+  int? _pageNumber;
+  int? get pageNumber => _$this._pageNumber;
+  set pageNumber(int? pageNumber) => _$this._pageNumber = pageNumber;
 
   bool? _unpaged;
   bool? get unpaged => _$this._unpaged;
@@ -116,8 +116,8 @@ class PageableObjectBuilder
       _offset = $v.offset;
       _sort = $v.sort?.toBuilder();
       _paged = $v.paged;
-      _pageNumber = $v.pageNumber;
       _pageSize = $v.pageSize;
+      _pageNumber = $v.pageNumber;
       _unpaged = $v.unpaged;
       _$v = null;
     }
@@ -146,8 +146,8 @@ class PageableObjectBuilder
             offset: offset,
             sort: _sort?.build(),
             paged: paged,
-            pageNumber: pageNumber,
             pageSize: pageSize,
+            pageNumber: pageNumber,
             unpaged: unpaged,
           );
     } catch (_) {

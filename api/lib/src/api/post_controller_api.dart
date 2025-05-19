@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:openapi/src/api_util.dart';
+import 'package:openapi/src/model/page_post_response_dto.dart';
 import 'package:openapi/src/model/post_dto.dart';
 
 class PostControllerApi {
@@ -24,7 +25,6 @@ class PostControllerApi {
   /// 
   ///
   /// Parameters:
-  /// * [title] 
   /// * [text] 
   /// * [files] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
@@ -37,9 +37,8 @@ class PostControllerApi {
   /// Returns a [Future] containing a [Response] with a [PostDTO] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<PostDTO>> createPost({ 
-    required String title,
     required String text,
-    required BuiltList<MultipartFile> files,
+    BuiltList<MultipartFile>? files,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -62,7 +61,6 @@ class PostControllerApi {
     );
 
     final _queryParameters = <String, dynamic>{
-      r'title': encodeQueryParameter(_serializers, title, const FullType(String)),
       r'text': encodeQueryParameter(_serializers, text, const FullType(String)),
     };
 
@@ -70,7 +68,7 @@ class PostControllerApi {
 
     try {
       _bodyData = FormData.fromMap(<String, dynamic>{
-        r'files': files.toList(),
+        if (files != null) r'files': files.toList(),
       });
 
     } catch(error, stackTrace) {
@@ -178,6 +176,9 @@ class PostControllerApi {
   /// 
   ///
   /// Parameters:
+  /// * [sortBy] 
+  /// * [page] 
+  /// * [size] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -185,9 +186,12 @@ class PostControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [BuiltList<PostDTO>] as data
+  /// Returns a [Future] containing a [Response] with a [PagePostResponseDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<BuiltList<PostDTO>>> getAllPosts({ 
+  Future<Response<PagePostResponseDTO>> getAllPosts({ 
+    String? sortBy = 'date',
+    int? page = 0,
+    int? size = 10,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -208,22 +212,29 @@ class PostControllerApi {
       validateStatus: validateStatus,
     );
 
+    final _queryParameters = <String, dynamic>{
+      if (sortBy != null) r'sortBy': encodeQueryParameter(_serializers, sortBy, const FullType(String)),
+      if (page != null) r'page': encodeQueryParameter(_serializers, page, const FullType(int)),
+      if (size != null) r'size': encodeQueryParameter(_serializers, size, const FullType(int)),
+    };
+
     final _response = await _dio.request<Object>(
       _path,
       options: _options,
+      queryParameters: _queryParameters,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    BuiltList<PostDTO>? _responseData;
+    PagePostResponseDTO? _responseData;
 
     try {
       final rawResponse = _response.data;
       _responseData = rawResponse == null ? null : _serializers.deserialize(
         rawResponse,
-        specifiedType: const FullType(BuiltList, [FullType(PostDTO)]),
-      ) as BuiltList<PostDTO>;
+        specifiedType: const FullType(PagePostResponseDTO),
+      ) as PagePostResponseDTO;
 
     } catch (error, stackTrace) {
       throw DioException(
@@ -235,7 +246,7 @@ class PostControllerApi {
       );
     }
 
-    return Response<BuiltList<PostDTO>>(
+    return Response<PagePostResponseDTO>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,

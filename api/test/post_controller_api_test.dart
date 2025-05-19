@@ -7,7 +7,7 @@ void main() {
   final instance = Openapi().getPostControllerApi();
 
   group(PostControllerApi, () {
-    //Future<PostDTO> createPost(String title, String text, BuiltList<Uint8List> files) async
+    //Future<PostDTO> createPost(String text, { BuiltList<MultipartFile> files }) async
     test('test createPost', () async {
       // TODO
     });
@@ -17,7 +17,7 @@ void main() {
       // TODO
     });
 
-    //Future<BuiltList<PostDTO>> getAllPosts() async
+    //Future<PagePostResponseDTO> getAllPosts({ String sortBy, int page, int size }) async
     test('test getAllPosts', () async {
       // TODO
     });
@@ -27,7 +27,7 @@ void main() {
       // TODO
     });
 
-    //Future<PostDTO> updatePost(int id, PostDTO postDTO, BuiltList<Uint8List> files) async
+    //Future<PostDTO> updatePost(int id, { PostDTO postDTO, BuiltList<MultipartFile> files }) async
     test('test updatePost', () async {
       // TODO
     });

@@ -6,17 +6,14 @@ import 'package:image_picker/image_picker.dart';
 class EditPostPage extends StatefulWidget {
   final int? postId; // Добавляем параметр postId
   final String initialText;
-  final String? initialTitle; // Добавляем параметр для заголовка
   final List<String> initialImagePaths;
-  final Function(String?, String, List<String>)
-      onSave; // Обновляем сигнатуру onSave
+  final Function(String, List<String>) onSave; // Обновляем сигнатуру onSave
   final Function() onDelete;
 
   const EditPostPage({
     super.key,
     this.postId,
     required this.initialText,
-    this.initialTitle,
     required this.initialImagePaths,
     required this.onSave,
     required this.onDelete,
@@ -36,7 +33,6 @@ class _EditPostPageState extends State<EditPostPage> {
   void initState() {
     super.initState();
     _textController = TextEditingController(text: widget.initialText);
-    _titleController = TextEditingController(text: widget.initialTitle ?? '');
     _currentImagePaths = List.from(widget.initialImagePaths);
   }
 
@@ -139,18 +135,6 @@ class _EditPostPageState extends State<EditPostPage> {
             children: [
               const SizedBox(height: 20),
               TextField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  hintText: 'Заголовок поста...',
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(16),
-                ),
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextField(
                 controller: _textController,
                 maxLines: null,
                 decoration: const InputDecoration(
@@ -230,9 +214,6 @@ class _EditPostPageState extends State<EditPostPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     widget.onSave(
-                      _titleController.text.isNotEmpty
-                          ? _titleController.text
-                          : null,
                       _textController.text,
                       _currentImagePaths,
                     );

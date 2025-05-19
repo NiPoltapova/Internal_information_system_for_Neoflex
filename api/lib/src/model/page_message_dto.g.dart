@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'page_booking_dto.dart';
+part of 'page_message_dto.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$PageBookingDTO extends PageBookingDTO {
+class _$PageMessageDTO extends PageMessageDTO {
   @override
   final int? totalPages;
   @override
@@ -14,7 +14,7 @@ class _$PageBookingDTO extends PageBookingDTO {
   @override
   final int? size;
   @override
-  final BuiltList<BookingDTO>? content;
+  final BuiltList<MessageDTO>? content;
   @override
   final int? number;
   @override
@@ -30,10 +30,10 @@ class _$PageBookingDTO extends PageBookingDTO {
   @override
   final bool? empty;
 
-  factory _$PageBookingDTO([void Function(PageBookingDTOBuilder)? updates]) =>
-      (new PageBookingDTOBuilder()..update(updates))._build();
+  factory _$PageMessageDTO([void Function(PageMessageDTOBuilder)? updates]) =>
+      (new PageMessageDTOBuilder()..update(updates))._build();
 
-  _$PageBookingDTO._(
+  _$PageMessageDTO._(
       {this.totalPages,
       this.totalElements,
       this.size,
@@ -48,17 +48,17 @@ class _$PageBookingDTO extends PageBookingDTO {
       : super._();
 
   @override
-  PageBookingDTO rebuild(void Function(PageBookingDTOBuilder) updates) =>
+  PageMessageDTO rebuild(void Function(PageMessageDTOBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  PageBookingDTOBuilder toBuilder() =>
-      new PageBookingDTOBuilder()..replace(this);
+  PageMessageDTOBuilder toBuilder() =>
+      new PageMessageDTOBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is PageBookingDTO &&
+    return other is PageMessageDTO &&
         totalPages == other.totalPages &&
         totalElements == other.totalElements &&
         size == other.size &&
@@ -92,7 +92,7 @@ class _$PageBookingDTO extends PageBookingDTO {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'PageBookingDTO')
+    return (newBuiltValueToStringHelper(r'PageMessageDTO')
           ..add('totalPages', totalPages)
           ..add('totalElements', totalElements)
           ..add('size', size)
@@ -108,9 +108,9 @@ class _$PageBookingDTO extends PageBookingDTO {
   }
 }
 
-class PageBookingDTOBuilder
-    implements Builder<PageBookingDTO, PageBookingDTOBuilder> {
-  _$PageBookingDTO? _$v;
+class PageMessageDTOBuilder
+    implements Builder<PageMessageDTO, PageMessageDTOBuilder> {
+  _$PageMessageDTO? _$v;
 
   int? _totalPages;
   int? get totalPages => _$this._totalPages;
@@ -125,10 +125,10 @@ class PageBookingDTOBuilder
   int? get size => _$this._size;
   set size(int? size) => _$this._size = size;
 
-  ListBuilder<BookingDTO>? _content;
-  ListBuilder<BookingDTO> get content =>
-      _$this._content ??= new ListBuilder<BookingDTO>();
-  set content(ListBuilder<BookingDTO>? content) => _$this._content = content;
+  ListBuilder<MessageDTO>? _content;
+  ListBuilder<MessageDTO> get content =>
+      _$this._content ??= new ListBuilder<MessageDTO>();
+  set content(ListBuilder<MessageDTO>? content) => _$this._content = content;
 
   int? _number;
   int? get number => _$this._number;
@@ -160,11 +160,11 @@ class PageBookingDTOBuilder
   bool? get empty => _$this._empty;
   set empty(bool? empty) => _$this._empty = empty;
 
-  PageBookingDTOBuilder() {
-    PageBookingDTO._defaults(this);
+  PageMessageDTOBuilder() {
+    PageMessageDTO._defaults(this);
   }
 
-  PageBookingDTOBuilder get _$this {
+  PageMessageDTOBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _totalPages = $v.totalPages;
@@ -184,24 +184,24 @@ class PageBookingDTOBuilder
   }
 
   @override
-  void replace(PageBookingDTO other) {
+  void replace(PageMessageDTO other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$PageBookingDTO;
+    _$v = other as _$PageMessageDTO;
   }
 
   @override
-  void update(void Function(PageBookingDTOBuilder)? updates) {
+  void update(void Function(PageMessageDTOBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  PageBookingDTO build() => _build();
+  PageMessageDTO build() => _build();
 
-  _$PageBookingDTO _build() {
-    _$PageBookingDTO _$result;
+  _$PageMessageDTO _build() {
+    _$PageMessageDTO _$result;
     try {
       _$result = _$v ??
-          new _$PageBookingDTO._(
+          new _$PageMessageDTO._(
             totalPages: totalPages,
             totalElements: totalElements,
             size: size,
@@ -227,7 +227,7 @@ class PageBookingDTOBuilder
         _pageable?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'PageBookingDTO', _$failedField, e.toString());
+            r'PageMessageDTO', _$failedField, e.toString());
       }
       rethrow;
     }

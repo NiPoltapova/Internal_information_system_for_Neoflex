@@ -15,15 +15,20 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(LikeDTO.serializer)
       ..add(MediaDTO.serializer)
       ..add(MediaDTOMediaTypeEnum.serializer)
+      ..add(MessageCreateRequest.serializer)
       ..add(MessageDTO.serializer)
       ..add(MessageNotificationDTO.serializer)
+      ..add(MessageUpdateRequest.serializer)
       ..add(PageBookingDTO.serializer)
       ..add(PageChatSummaryDTO.serializer)
       ..add(PageLikeDTO.serializer)
+      ..add(PageMessageDTO.serializer)
+      ..add(PagePostResponseDTO.serializer)
       ..add(PageUserDTO.serializer)
       ..add(Pageable.serializer)
       ..add(PageableObject.serializer)
       ..add(PostDTO.serializer)
+      ..add(PostResponseDTO.serializer)
       ..add(RepostDTO.serializer)
       ..add(SortObject.serializer)
       ..add(UserDTO.serializer)
@@ -45,8 +50,23 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(MediaDTO)]),
           () => new ListBuilder<MediaDTO>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(MediaDTO)]),
+          () => new ListBuilder<MediaDTO>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(MessageDTO)]),
+          () => new ListBuilder<MessageDTO>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(PostResponseDTO)]),
+          () => new ListBuilder<PostResponseDTO>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Uint8List)]),
+          () => new ListBuilder<Uint8List>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Uint8List)]),
+          () => new ListBuilder<Uint8List>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(UserDTO)]),
           () => new ListBuilder<UserDTO>())
